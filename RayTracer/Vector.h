@@ -7,6 +7,9 @@ public:
 	Vector();
 	Vector(double a,double b,double c);
 	Vector(Vector& c);
+	 int r() const;
+	 int g() const;
+	 int b() const;
 
 	Vector operator - (Vector v);
 	Vector operator-();
@@ -17,6 +20,8 @@ public:
 	Vector cross(Vector v);
 	static Vector cross(Vector u, Vector v);
 	
+	friend std::ofstream& operator<<(std::ofstream& ofs, const Vector& v);
+
 	double length();
 	double dist(Vector v);
 	static double dist(Vector u, Vector v);

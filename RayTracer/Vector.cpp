@@ -107,5 +107,30 @@ Vector Vector::normalize()
 	x = v.x;
 	y = v.y;
 	z = v.z;
+	return *this;
+}
+
+ int Vector::r() const
+{
+	float abv = fabs(x);
+	return fmin(abv * 255,255);
+}
+
+ int Vector::g() const
+{
+	float abv = fabs(y);
+	return fmin(abv * 255, 255);
+}
+
+int Vector::b() const
+{
+	float abv = fabs(z);
+	return fmin(abv * 255, 255);
+}
+
+std::ofstream& operator<<(std::ofstream& ofs, const Vector& v)
+{
+	ofs << v.r() << " " << v.g() << " " << v.b() << " ";
+	return ofs;
 }
 

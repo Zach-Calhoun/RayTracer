@@ -16,5 +16,48 @@ Sphere::Sphere(Vector o, double r, Vector c)
 
 Intersection Sphere::Trace(Ray& r)
 {
+	Vector rayToSphere = origin - r.origin;
+
+	//ray starts inside of sphere
+	//discard because by convention
+	//we discard backfaces
+	if (rayToSphere * r.direction < 0)
+	{
+		return Intersection();
+	}
+	else
+	{
+		//project cententer of sphere on direction
+		Vector scp = r.direction * (origin * r.direction);
+		double distFromCenterToRay = (origin - scp).length();
+		//ray misses the sphere
+		if (distFromCenterToRay > radius)
+		{
+			return Intersection();
+		}
+		else
+		{
+			double dist = sqrt(radius*radius - distFromCenterToRay * distFromCenterToRay);
+			double distToHit = 0;
+			if (rayToSphere.length() > radius)
+			{
+				distToHit = (scp - r.origin).length() - dist;
+			}
+			else
+			{
+				distToHit = (scp - r.origin).length() + dist;
+			}
+
+			Vector hit = r.origin + r.direction * distToHit;
+			Vector norm = hit - origin;
+			norm.normalize();
+			Intersection result = Intersection();
+			result.color = color;
+			result.hit = hit;
+			result.success = true;
+			result.normal = norm;
+			return result;
+		}
+	}
 
 }

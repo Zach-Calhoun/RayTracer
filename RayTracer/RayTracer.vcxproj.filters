@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Camera.cpp">
+      <Filter>Sources\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>Sources\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitives.cpp">
+      <Filter>Sources\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Sources\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Ray.cpp">
+      <Filter>Sources\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector.cpp">
+      <Filter>Sources\Operations</Filter>
+    </ClCompile>
+    <ClCompile Include="Intersection.cpp">
+      <Filter>Sources\Primitives</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="config.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitives.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{bdf9e1ff-bb2a-4c33-9fa9-1e032200c574}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{a209da50-ee80-4f17-a0a3-3334cafbc638}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Primitives">
+      <UniqueIdentifier>{ee438f3b-4bf7-460d-b1b3-f247dc60acbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Operations">
+      <UniqueIdentifier>{e69e0815-c1ef-42c8-bc98-45c0c5884d17}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

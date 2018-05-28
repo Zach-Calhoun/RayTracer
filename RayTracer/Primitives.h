@@ -2,6 +2,36 @@
 #include "Vector.h"
 //#include <stdlib.h>
 //#include 
+class Ray;
+
+class Intersection
+{
+public:
+	Vector hit;
+	Vector color;
+	Vector normal;
+	bool success;
+
+	Intersection();
+};
+
+class RayTraceable
+{
+public:
+	virtual Intersection Trace(Ray& r) = 0;
+};
+
+class Ray
+{
+public:
+	Vector origin;
+	Vector direction;
+
+	Ray();
+	Ray(Vector o, Vector d);
+	Intersection Trace(RayTraceable& o);
+};
+
 class Camera
 {
 private:
@@ -22,7 +52,7 @@ public:
 
 	Vector pos;
 	Vector rot;
-	
+
 	void Setup(int h, int w, double h_fov, double v_fov);
 	void LookAt(Vector v);
 	//returns the coresponding ray for x and y screen coordinates;
@@ -31,29 +61,7 @@ public:
 	//id Render(Scene& scene);
 };
 
-class Ray
-{
-public:
-	Vector origin;
-	Vector direction;
 
-	Ray();
-	Ray(Vector o, Vector d);
-	Intersection Trace(RayTraceable& o);
-};
-
-
-class Intersection
-{
-public:
-	Vector hit;
-};
-
-class RayTraceable
-{
-public:
-	virtual Intersection Trace(Ray& r) = 0;
-};
 
 //eventualy theese will contain a material type object
 class Sphere : public RayTraceable
