@@ -1,2 +1,12 @@
+<<<<<<< HEAD
 /RayTracer.opensdf
 /RayTracer.sdf
+=======
+Debug
+Release
+bin
+*.dll
+*.pdb
+*.opensdf
+*.sdf
+>>>>>>> .gitignore update
