@@ -19,6 +19,7 @@ public:
 	Vector operator * (double v);
 	Vector cross(Vector v);
 	static Vector cross(Vector u, Vector v);
+	Vector blend(Vector v);
 	
 	friend std::ofstream& operator<<(std::ofstream& ofs, const Vector& v);
 

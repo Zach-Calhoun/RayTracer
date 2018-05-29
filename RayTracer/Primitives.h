@@ -86,4 +86,5 @@ public:
 
 	Plane();
 	Plane(Vector n, double d, Vector c);
+	Intersection Trace(Ray& r);
 };

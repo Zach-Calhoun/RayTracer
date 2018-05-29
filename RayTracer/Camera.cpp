@@ -30,20 +30,20 @@ void Camera::CalculateRayConstants()
 	int halfWidth = screenWidth / 2;
 	double beta = (M_PI - horizontalFov) / 2;
 	double cosBeta = cos(beta);
-	focalLength = sqrt(halfWidth * halfWidth * (1 / (cosBeta * cosBeta) - 1));
+	focalLength = sqrt(halfWidth * halfWidth * (1 / (cosBeta * cosBeta) - 1)) / 250; //divide so camera fustrum size is more managable
 	double halfVFovCos = cos(verticalFov / 2);
 	double vFovFactor = 1 / (halfVFovCos * halfVFovCos);
 	double allowedHeight = 2 * sqrt((focalLength * focalLength) * (vFovFactor - 1));
-	heightFactor = screenHeight / allowedHeight;
+	heightFactor =  allowedHeight / screenHeight;
 }
 
 Ray Camera::GenerateRay(int y, int x)
 {
 	//get relative pos in camera space
 	//after some drawings on a piece of paper
-	int cam_x = x - (screenWidth / 2);
-	int ray_y = ((double)y / screenHeight) * heightFactor;
-	int cam_y = ((screenHeight * heightFactor) / 2) - y;
+	double cam_x = ((double)x - (screenWidth / 2)) / 250;
+	//double ray_y = ((double)y / screenHeight) * heightFactor;
+	double cam_y = ((screenHeight / 2) - y) * heightFactor;
 
 	Vector dir = Vector(cam_x, cam_y, focalLength);
 	Ray ray = Ray(pos, dir.normalized());

@@ -134,3 +134,8 @@ std::ofstream& operator<<(std::ofstream& ofs, const Vector& v)
 	return ofs;
 }
 
+Vector Vector::blend(Vector v)
+{
+	return Vector(x*v.x, y * v.y, z * v.z);
+}
+
