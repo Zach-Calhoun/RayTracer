@@ -3,6 +3,7 @@
 //#include <stdlib.h>
 //#include 
 class Ray;
+class Scene;
 
 class Intersection
 {
@@ -11,6 +12,7 @@ public:
 	Vector color;
 	Vector normal;
 	bool success;
+
 
 	Intersection();
 };
@@ -39,6 +41,7 @@ private:
 	int screenHeight;
 	double horizontalFov;
 	double verticalFov;
+	Vector ** buffer;
 
 	//distance between "lens" and "origin"
 	double focalLength;
@@ -48,17 +51,25 @@ private:
 	void CalculateRayConstants();
 
 public:
-	Camera();
-
 	Vector pos;
 	Vector rot;
 
+	Camera();
+	Camera(int h, int w, double v_fov, double h_fov);
+	Camera(const Camera& c);
+	Camera& operator = (const Camera& c);
+
+	
+	
 	void Setup(int h, int w, double h_fov, double v_fov);
 	void LookAt(Vector v);
 	//returns the coresponding ray for x and y screen coordinates;
 	Ray GenerateRay(int x, int y);
 
-	//id Render(Scene& scene);
+	void Render(Scene& scene);
+	bool SavePpm(char * path);
+
+	~Camera();
 };
 
 
@@ -70,6 +81,7 @@ public:
 	Vector origin;
 	double radius;
 	Vector color;
+	
 
 	Sphere();
 	Sphere(Vector o, double r, Vector c);

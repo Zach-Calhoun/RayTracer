@@ -7,5 +7,6 @@ public:
 	Vector color;
 	double energy;
 	PointLight();
+	PointLight(const PointLight& p);
 	PointLight(Vector p, Vector c, double e);
 };

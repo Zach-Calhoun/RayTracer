@@ -1,4 +1,4 @@
-#include "Light.h";
+#include "Light.h"
 
 PointLight::PointLight()
 {
@@ -12,4 +12,11 @@ PointLight::PointLight(Vector p, Vector c, double e)
 	pos = p;
 	color = c;
 	energy = e;
+}
+
+PointLight::PointLight(const PointLight& p)
+{
+	pos = Vector(p.pos);
+	color = Vector(p.color);
+	energy = p.energy;
 }

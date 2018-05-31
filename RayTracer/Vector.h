@@ -6,11 +6,12 @@ public:
 	double x, y, z;
 	Vector();
 	Vector(double a,double b,double c);
-	Vector(Vector& c);
+	Vector(const Vector& c);
 	 int r() const;
 	 int g() const;
 	 int b() const;
 
+	 Vector& operator= (const Vector& v);
 	Vector operator - (Vector v);
 	Vector operator-();
 	Vector operator + (Vector v);

@@ -27,6 +27,9 @@
     <ClCompile Include="Plane.cpp">
       <Filter>Sources\Primitives</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -48,6 +51,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

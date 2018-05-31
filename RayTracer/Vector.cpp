@@ -14,11 +14,17 @@ Vector::Vector(double a, double b, double c)
 	z = c;
 }
 
-Vector::Vector(Vector& c)
+Vector::Vector(const Vector& c)
+{
+	operator=(c);
+}
+
+Vector& Vector::operator=(const Vector& c)
 {
 	x = c.x;
 	y = c.y;
 	z = c.z;
+	return *this;
 }
 
 double Vector::length()
