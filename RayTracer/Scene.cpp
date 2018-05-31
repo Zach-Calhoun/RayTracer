@@ -7,8 +7,10 @@ Scene::Scene()
 
 void Scene::InitDefault()
 {
+	camera.pos = Vector(0, 0, -0.5);
+	camera.rot.x = ((double)-45 / 180) * 3.14;
 	camera.Setup(SCREEN_HEIGHT, SCREEN_WIDTH, V_FOV, H_FOV);
-	camera.pos = Vector(0, 1, -5);
+	
 
 	objects.push_back(new Plane(Vector(0, 1, 0), 1, Vector(1, 1, 0)));
 	objects.push_back(new Plane(Vector(1, 0, 0), 7, Vector(1, 0, 0)));

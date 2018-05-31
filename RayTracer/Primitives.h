@@ -1,5 +1,6 @@
 #pragma once
 #include "Vector.h"
+#include "Matrix.h"
 //#include <stdlib.h>
 //#include 
 class Ray;
@@ -42,7 +43,7 @@ private:
 	double horizontalFov;
 	double verticalFov;
 	Vector ** buffer;
-
+	Matrix transform;
 	//distance between "lens" and "origin"
 	double focalLength;
 	//scaling fdactor between screen height and allowed height from vertical FOV calcluations

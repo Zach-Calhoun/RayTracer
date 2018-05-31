@@ -31,7 +31,7 @@ Intersection Sphere::Trace(Ray& r)
 		//correct only if camera is always in origin!!!
 		//Vector scp = r.direction * (origin * r.direction);
 		Vector scp = r.direction * (rayToSphere * r.direction);
-		double distFromCenterToRay = ((origin - r.origin) - scp).length();
+		double distFromCenterToRay = (rayToSphere - scp).length();
 		//ray misses the sphere
 		if (distFromCenterToRay > radius)
 		{

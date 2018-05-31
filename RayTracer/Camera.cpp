@@ -9,7 +9,7 @@ Camera::Camera()
 {
 	pos = Vector();
 	rot = Vector();
-	
+	transform = Matrix::Identity();
 
 	screenHeight = SCREEN_HEIGHT;
 	screenWidth = SCREEN_WIDTH;
@@ -49,6 +49,8 @@ void Camera::Setup(int h, int w, double v_fov, double h_fov)
 	horizontalFov = (h_fov / 180) * M_PI;
 	CalculateRayConstants();
 
+	transform.rotateX(rot.x);
+
 	for (int i = 0; i < screenHeight; i++)
 	{
 		delete[] buffer[i];
@@ -85,6 +87,8 @@ Ray Camera::GenerateRay(int y, int x)
 
 	Vector dir = Vector(cam_x, cam_y, focalLength);
 	Ray ray = Ray(pos, dir.normalized());
+	//rotate dir;
+	ray.direction = transform * ray.direction;
 	
 	return ray;
 	//TODO: Apply camera rotation to generated vector

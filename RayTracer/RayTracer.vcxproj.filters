@@ -30,6 +30,9 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>Sources\Operations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">

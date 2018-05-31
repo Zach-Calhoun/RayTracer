@@ -1,1 +1,49 @@
 #pragma once
+#include "Vector.h"
+
+class Matrix
+{
+private:
+	int m, n;
+	double ** _mat;
+public:
+	Matrix();
+	Matrix(int m, int n);
+
+	static Matrix Identity();
+	Matrix& SetIdentity();
+
+	Matrix operator*(const Matrix& mat);
+	Vector operator*(const Vector& v);
+	double* operator[](int i);
+	
+	Matrix& rotateX(double ang);
+	Matrix& rotateY(double ang);
+	Matrix& rotateZ(double ang);
+
+	Matrix& invert();
+	void Release();
+
+	static Matrix RotationX(double ang);
+	static Matrix RotationY(double ang);
+	static Matrix RotationZ(double ang);
+	
+
+	static Matrix TranslationX(double deltaX);
+	static Matrix TranslationY(double deltaY);
+	static Matrix TranslationZ(double deltaZ);
+	static Matrix Translation(double x, double y, double z);
+
+
+	static Matrix ScaleX(double s);
+	static Matrix ScaleY(double s);
+	static Matrix ScaleZ(double s);
+	static Matrix Scale(double s);
+	static Matrix Scale(double x, double y, double z);
+
+	static Matrix Inv(Matrix m);
+
+
+
+
+};
