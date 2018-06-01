@@ -104,6 +104,42 @@ Matrix Matrix::RotationX(double ang)
 	return rot;
 }
 
+Matrix& Matrix::rotateY(double ang)
+{
+	Matrix rot = Matrix::RotationY(ang);
+	*this = rot * (*this);
+	rot.Release();
+	return *this;
+}
+
+Matrix Matrix::RotationY(double ang)
+{
+	Matrix rot = Matrix::Identity();
+	rot[0][0] = cos(ang);
+	rot[0][2] = sin(ang);
+	rot[2][0] = -sin(ang);
+	rot[2][2] = cos(ang);
+	return rot;
+}
+
+Matrix& Matrix::rotateZ(double ang)
+{
+	Matrix rot = Matrix::RotationZ(ang);
+	*this = rot * (*this);
+	rot.Release();
+	return *this;
+}
+
+Matrix Matrix::RotationZ(double ang)
+{
+	Matrix rot = Matrix::Identity();
+	rot[0][0] = cos(ang);
+	rot[0][1] = -sin(ang);
+	rot[1][0] = sin(ang);
+	rot[1][1] = cos(ang);
+	return rot;
+}
+
 void Matrix::Release()
 {
 	for (int i = 0; i < m; i++)

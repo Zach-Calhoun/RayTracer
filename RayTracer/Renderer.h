@@ -21,7 +21,7 @@ class Renderer
 {
 private:
 	int h, w;
-
+	int renderMode;
 	void RenderFull();
 	void RenderPart(int topY, int topX, int botY, int botX);
 
@@ -42,6 +42,7 @@ public:
 
 	void SetCamera(Camera& camera);
 	void SetScene(Scene& scene);
+	void SetRenderMode(int mode);
 
 	void RenderSingleThread();
 	void RenderMultiThread(int horDivs, int verDivs, int maxThreads = 4);

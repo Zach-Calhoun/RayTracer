@@ -120,7 +120,10 @@ void Camera::SetRotation(double x, double y, double z)
 void Camera::SetRotation(Vector r)
 {
 	rot = r;
+	transform = Matrix::Identity();
 	transform.rotateX(rot.x);
+	transform.rotateY(rot.y);
+	transform.rotateZ(rot.z);
 }
 //
 //void Camera::Render(Scene& scene)

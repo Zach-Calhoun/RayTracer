@@ -1,5 +1,4 @@
 #include "Scene.h"
-
 Scene::Scene()
 {
 
@@ -24,7 +23,8 @@ void Scene::InitDefault()
 	//PointLight light = PointLight(Vector(1, 4, 1), Vector(1, 1, 1), 50);
 	//lights.push_back(light);
 
-	camera.pos = Vector(0, 0, 0);
+	camera.pos = Vector(0, 0, 4);
+	camera.rot = Vector(0, 3.14, 0);
 	camera.Setup(SCREEN_HEIGHT, SCREEN_WIDTH, V_FOV, H_FOV);
 	objects.push_back(new Plane(Vector(0, 1, 0), 1, Vector(1, 1, 0)));
 	objects.push_back(new Sphere(Vector(0, 0, 2), 1, Vector(0, 0, 1)));

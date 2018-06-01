@@ -27,6 +27,11 @@ void Renderer::SetScene(Scene& scene)
 	SetCamera(scene.camera);
 }
 
+void Renderer::SetRenderMode(int renderMode)
+{
+	this->renderMode = renderMode;
+}
+
 void Renderer::RenderFull()
 {
 	RenderPart(0, 0, h, w);
@@ -59,52 +64,58 @@ void Renderer::RenderPart(int topY, int topX, int botY, int botX)
 			{
 #define light scene->lights[0]
 				//calc basic light
-				Vector lightDir = (light.pos - hit.hit);
-				double lightDistance = lightDir.length();
-
-				Ray shadowRay = Ray(hit.hit, lightDir.normalized());
-				//add small forward to prevent self collison
-				shadowRay.origin = shadowRay.origin + (lightDir.normalized() * 0.0001);
-				Intersection shadowHit = Intersection();
-				for (int l = 0; l < objects.size(); l++)
-				{
-					shadowHit = shadowRay.Trace(*objects[l]);
-					if (shadowHit.success && (shadowRay.origin.dist(shadowHit.hit)) < lightDistance)
-					{
-						break;
-					}
-				}
 				double intensity = 0;
-				if (shadowHit.success && (shadowRay.origin.dist(shadowHit.hit)) < lightDistance)
+				Vector finalColor = hit.color;
+
+				if (renderMode & DIFFUSE)
 				{
-					intensity = AMBIENT_LEVEL;
-				}
-				else
-				{
+					Vector lightDir = (light.pos - hit.hit);
+					double lightDistance = lightDir.length();
+					//finalColor = hit.color.blend(light.color) * intensity * (light.energy / (lightDistance * lightDistance));
 					intensity = lightDir.normalized() * hit.normal;
-				}
+					if (renderMode & SHADOWS)
+					{
+						Ray shadowRay = Ray(hit.hit, lightDir.normalized());
+						//add small forward to prevent self collison
+						shadowRay.origin = shadowRay.origin + (lightDir.normalized() * 0.0001);
+						Intersection shadowHit = Intersection();
+						for (int l = 0; l < objects.size(); l++)
+						{
+							shadowHit = shadowRay.Trace(*objects[l]);
+							if (shadowHit.success && (shadowRay.origin.dist(shadowHit.hit)) < lightDistance)
+							{
+								break;
+							}
+						}
 
 
-				if (intensity < AMBIENT_LEVEL)
-				{
-					intensity = AMBIENT_LEVEL;
+						if (shadowHit.success && (shadowRay.origin.dist(shadowHit.hit)) < lightDistance)
+						{
+							intensity = AMBIENT_LEVEL;
+						}
+						
+					}
+
+					if (intensity < AMBIENT_LEVEL)
+					{
+						intensity = AMBIENT_LEVEL;
+					}
+					finalColor = hit.color.blend(light.color) * intensity * (light.energy / (lightDistance * lightDistance));
+					
 				}
-				Vector finalColor = hit.color.blend(light.color) * intensity * (light.energy / (lightDistance * lightDistance));
 				camera->buffer[i][j] = finalColor;
+				//= r.Trace(sp);
+
+				//Ray r = Ray(); //defaults to world origin and forward direction ( +z )
+				//std::cout << "Y: " << i << " X: " << j << " " << hit.color.r() << " " << hit.color.g() << " " << hit.color.b() << " " << std::endl;
 			}
 			else
 			{
 				camera->buffer[i][j] = Vector(1, 1, 1);
 			}
-			//= r.Trace(sp);
-
-			//Ray r = Ray(); //defaults to world origin and forward direction ( +z )
-			//std::cout << "Y: " << i << " X: " << j << " " << hit.color.r() << " " << hit.color.g() << " " << hit.color.b() << " " << std::endl;
 		}
 	}
 }
-
-
 
 void Renderer::RenderSingleThread()
 {
