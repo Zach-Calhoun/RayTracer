@@ -8,6 +8,6 @@ enum RenderModes { NO_LIGHT = 1, DIFFUSE = 2, SPECULAR = 4, SHADOWS = 8, REFLECT
 #define V_FOV 90
 //#define H_FOV 120
 #define H_FOV 90
-#define AMBIENT_LEVEL 0.1
+#define AMBIENT_LEVEL 0.05
 
 #define MAX_BOUNCE 16

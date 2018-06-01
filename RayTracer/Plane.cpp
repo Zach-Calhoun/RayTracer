@@ -24,7 +24,9 @@ Intersection Plane::Trace(Ray& r)
 	{
 		//intersection exists
 		Vector planePoint = -normal * distance;
-		double dist = (planePoint - r.origin) * normal / dot;	
+		Vector rayToPlane = planePoint - r.origin;
+		double dist = rayToPlane * normal / dot;
+		//double dist = rayToPlane * normal / (rayToPlane.normalized() * normal);
 		if (dist < 0) {
 			return Intersection();
 		}

@@ -1,5 +1,5 @@
 #include "Matrix.h"
-
+#include <iostream>
 Matrix::Matrix()
 {
 	Matrix(4, 4);
@@ -34,7 +34,7 @@ Matrix Matrix::operator*(const Matrix& mat)
 			result[i][j] = 0;
 			for (int k = 0; k < mat.m; k++)
 			{
-				result[i][j] += _mat[i][k] * _mat[k][j];
+				result[i][j] += _mat[i][k] * mat._mat[k][j];
 			}
 		}
 	}
@@ -48,8 +48,13 @@ Vector Matrix::operator*(const Vector& v)
 	tmp[1][0] = v.y;
 	tmp[2][0] = v.z;
 	tmp[3][0] = 1;
+	//std::cout << tmp;
+	//std::cout << *this;
 	Matrix res = (*this)*tmp;
+	//std::cout << res;
+	tmp.Release();
 	Vector result = Vector(res[0][0], res[1][0], res[2][0]);
+	res.Release();
 	return result;
 }
 
@@ -106,4 +111,30 @@ void Matrix::Release()
 		delete[] _mat[i];
 	}
 	delete[] _mat;
+}
+
+std::ofstream& operator<< (std::ofstream& o,Matrix&  m)
+{
+	for (int i = 0; i < m.m; i++)
+	{
+		for (int j = 0; j < m.n; j++)
+		{
+			o << m[i][j] << "\t";
+		}
+		o << std::endl;
+	}
+	return o;
+}
+
+std::ostream& operator<< (std::ostream& o, Matrix&  m)
+{
+	for (int i = 0; i < m.m; i++)
+	{
+		for (int j = 0; j < m.n; j++)
+		{
+			o << m[i][j] << "\t";
+		}
+		o << std::endl;
+	}
+	return o;
 }

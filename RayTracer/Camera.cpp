@@ -49,7 +49,7 @@ void Camera::Setup(int h, int w, double v_fov, double h_fov)
 	horizontalFov = (h_fov / 180) * M_PI;
 	CalculateRayConstants();
 
-	transform.rotateX(rot.x);
+	SetRotation(rot);
 
 	for (int i = 0; i < screenHeight; i++)
 	{
@@ -62,6 +62,14 @@ void Camera::Setup(int h, int w, double v_fov, double h_fov)
 	{
 		buffer[i] = new Vector[screenWidth];
 	}
+}
+
+int Camera::getHeight() const{
+	return screenHeight;
+}
+
+int Camera::getWidth() const {
+	return screenWidth;
 }
 
 void Camera::CalculateRayConstants()
@@ -98,6 +106,20 @@ Ray Camera::GenerateRay(int y, int x)
 void Camera::LookAt(Vector v)
 {
 
+}
+
+void Camera::SetRotation(double x, double y, double z)
+{
+	SetRotation(Vector(x, y, z));
+	
+	
+
+}
+
+void Camera::SetRotation(Vector r)
+{
+	rot = r;
+	transform.rotateX(rot.x);
 }
 
 void Camera::Render(Scene& scene)
@@ -173,6 +195,78 @@ void Camera::Render(Scene& scene)
 
 }
 
+void Camera::RenderPart(Scene& scene, int topY, int topX, int botY, int botX)
+{
+#define objects scene.objects
+
+	for (int i = topY; i < botY; i++)
+	{
+		for (int j = topX; j < botX; j++)
+		{
+			Ray r = GenerateRay(i, j);
+			Intersection hit = Intersection();
+			double min_dist = INFINITY;
+			for (int k = 0; k < objects.size(); k++)
+			{
+				RayTraceable* object = objects[k];
+				Intersection tmpHit = r.Trace(*object);
+				if (tmpHit.success) {
+					if (tmpHit.hit.length() < min_dist)
+					{
+						min_dist = tmpHit.hit.length();
+						hit = tmpHit;
+					}
+				}
+			}
+			if (hit.success)
+			{
+#define light scene.lights[0]
+				//calc basic light
+				Vector lightDir = (light.pos - hit.hit);
+				double lightDistance = lightDir.length();
+
+				Ray shadowRay = Ray(hit.hit, lightDir.normalized());
+				//add small forward to prevent self collison
+				shadowRay.origin = shadowRay.origin + (lightDir.normalized() * 0.0001);
+				Intersection shadowHit = Intersection();
+				for (int l = 0; l < objects.size(); l++)
+				{
+					shadowHit = shadowRay.Trace(*objects[l]);
+					if (shadowHit.success && (shadowRay.origin.dist(shadowHit.hit)) < lightDistance)
+					{
+						break;
+					}
+				}
+				double intensity = 0;
+				if (shadowHit.success && (shadowRay.origin.dist(shadowHit.hit)) < lightDistance)
+				{
+					intensity = AMBIENT_LEVEL;
+				}
+				else
+				{
+					intensity = lightDir.normalized() * hit.normal;
+				}
+
+
+				if (intensity < AMBIENT_LEVEL)
+				{
+					intensity = AMBIENT_LEVEL;
+				}
+				Vector finalColor = hit.color.blend(light.color) * intensity * (light.energy / (lightDistance * lightDistance));
+				buffer[i][j] = finalColor;
+			}
+			else
+			{
+				buffer[i][j] = Vector(1, 1, 1);
+			}
+			//= r.Trace(sp);
+
+			//Ray r = Ray(); //defaults to world origin and forward direction ( +z )
+			//std::cout << "Y: " << i << " X: " << j << " " << hit.color.r() << " " << hit.color.g() << " " << hit.color.b() << " " << std::endl;
+		}
+	}
+}
+
 bool Camera::SavePpm(char * path)
 {
 	try
@@ -196,6 +290,38 @@ bool Camera::SavePpm(char * path)
 		return false;
 	}
 	
+}
+
+bool Camera::SavePpm(char * path, int frame)
+{
+	try
+	{
+		std::string fullName = path;
+		fullName.append("_");
+		static char cbufr[6];
+		fullName.append(_itoa(frame, cbufr, 10));
+		fullName.append(".ppm");
+		std::ofstream output = std::ofstream(fullName);
+
+		output << "P3" << std::endl;
+		output << screenWidth << " " << screenHeight << std::endl;
+		output << 255 << std::endl;
+		for (int i = 0; i < screenHeight; i++)
+		{
+			for (int j = 0; j < screenWidth; j++)
+			{
+				output << buffer[i][j];
+			}
+		}
+		output.close();
+		return true;
+	}
+	catch (int e)
+	{
+		std::cout << e << std::endl;
+		return false;
+	}
+
 }
 
 Camera::~Camera()

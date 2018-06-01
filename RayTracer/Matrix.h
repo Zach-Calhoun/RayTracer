@@ -42,7 +42,8 @@ public:
 	static Matrix Scale(double x, double y, double z);
 
 	static Matrix Inv(Matrix m);
-
+	friend std::ofstream& operator<< (std::ofstream& o, Matrix&  m);
+	friend std::ostream& operator<< (std::ostream& o, Matrix&  m);
 
 
 
