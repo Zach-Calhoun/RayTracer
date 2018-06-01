@@ -1,4 +1,5 @@
 #include "Primitives.h"
+#include "Camera.h"
 #include "Scene.h"
 #include "config.h"
 #define _USE_MATH_DEFINES
@@ -121,151 +122,17 @@ void Camera::SetRotation(Vector r)
 	rot = r;
 	transform.rotateX(rot.x);
 }
-
-void Camera::Render(Scene& scene)
-{
-	#define objects scene.objects
-
-	for (int i = 0; i < screenHeight; i++)
-	{
-		for (int j = 0; j < screenWidth; j++)
-		{
-			Ray r = GenerateRay(i, j);
-			Intersection hit = Intersection();
-			double min_dist = INFINITY;
-			for (int k = 0; k < objects.size(); k++)
-			{
-				RayTraceable* object = objects[k];
-				Intersection tmpHit = r.Trace(*object);
-				if (tmpHit.success) {
-					if (tmpHit.hit.length() < min_dist)
-					{
-						min_dist = tmpHit.hit.length();
-						hit = tmpHit;
-					}
-				}
-			}
-			if (hit.success)
-			{
-				#define light scene.lights[0]
-				//calc basic light
-				Vector lightDir = (light.pos - hit.hit);
-				double lightDistance = lightDir.length();
-
-				Ray shadowRay = Ray(hit.hit, lightDir.normalized());
-				//add small forward to prevent self collison
-				shadowRay.origin = shadowRay.origin + (lightDir.normalized() * 0.0001);
-				Intersection shadowHit = Intersection();
-				for (int l = 0; l < objects.size(); l++)
-				{
-					shadowHit = shadowRay.Trace(*objects[l]);
-					if (shadowHit.success && (shadowRay.origin.dist(shadowHit.hit)) < lightDistance)
-					{
-						break;
-					}
-				}
-				double intensity = 0;
-				if (shadowHit.success && (shadowRay.origin.dist(shadowHit.hit)) < lightDistance)
-				{
-					intensity = AMBIENT_LEVEL;
-				}
-				else
-				{
-					intensity = lightDir.normalized() * hit.normal;
-				}
-
-
-				if (intensity < AMBIENT_LEVEL)
-				{
-					intensity = AMBIENT_LEVEL;
-				}
-				Vector finalColor = hit.color.blend(light.color) * intensity * (light.energy / (lightDistance * lightDistance));
-				buffer[i][j] = finalColor;
-			}
-			else
-			{
-				buffer[i][j] = Vector(1, 1, 1);
-			}
-			//= r.Trace(sp);
-
-			//Ray r = Ray(); //defaults to world origin and forward direction ( +z )
-			//std::cout << "Y: " << i << " X: " << j << " " << hit.color.r() << " " << hit.color.g() << " " << hit.color.b() << " " << std::endl;
-		}	
-	}
-
-}
-
-void Camera::RenderPart(Scene& scene, int topY, int topX, int botY, int botX)
-{
-#define objects scene.objects
-
-	for (int i = topY; i < botY; i++)
-	{
-		for (int j = topX; j < botX; j++)
-		{
-			Ray r = GenerateRay(i, j);
-			Intersection hit = Intersection();
-			double min_dist = INFINITY;
-			for (int k = 0; k < objects.size(); k++)
-			{
-				RayTraceable* object = objects[k];
-				Intersection tmpHit = r.Trace(*object);
-				if (tmpHit.success) {
-					if (tmpHit.hit.length() < min_dist)
-					{
-						min_dist = tmpHit.hit.length();
-						hit = tmpHit;
-					}
-				}
-			}
-			if (hit.success)
-			{
-#define light scene.lights[0]
-				//calc basic light
-				Vector lightDir = (light.pos - hit.hit);
-				double lightDistance = lightDir.length();
-
-				Ray shadowRay = Ray(hit.hit, lightDir.normalized());
-				//add small forward to prevent self collison
-				shadowRay.origin = shadowRay.origin + (lightDir.normalized() * 0.0001);
-				Intersection shadowHit = Intersection();
-				for (int l = 0; l < objects.size(); l++)
-				{
-					shadowHit = shadowRay.Trace(*objects[l]);
-					if (shadowHit.success && (shadowRay.origin.dist(shadowHit.hit)) < lightDistance)
-					{
-						break;
-					}
-				}
-				double intensity = 0;
-				if (shadowHit.success && (shadowRay.origin.dist(shadowHit.hit)) < lightDistance)
-				{
-					intensity = AMBIENT_LEVEL;
-				}
-				else
-				{
-					intensity = lightDir.normalized() * hit.normal;
-				}
-
-
-				if (intensity < AMBIENT_LEVEL)
-				{
-					intensity = AMBIENT_LEVEL;
-				}
-				Vector finalColor = hit.color.blend(light.color) * intensity * (light.energy / (lightDistance * lightDistance));
-				buffer[i][j] = finalColor;
-			}
-			else
-			{
-				buffer[i][j] = Vector(1, 1, 1);
-			}
-			//= r.Trace(sp);
-
-			//Ray r = Ray(); //defaults to world origin and forward direction ( +z )
-			//std::cout << "Y: " << i << " X: " << j << " " << hit.color.r() << " " << hit.color.g() << " " << hit.color.b() << " " << std::endl;
-		}
-	}
-}
+//
+//void Camera::Render(Scene& scene)
+//{
+//	
+//
+//}
+//
+//void Camera::RenderPart(Scene& scene, int topY, int topX, int botY, int botX)
+//{
+//
+//}
 
 bool Camera::SavePpm(char * path)
 {

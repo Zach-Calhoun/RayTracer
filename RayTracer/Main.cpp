@@ -11,86 +11,126 @@
 #include "SDL_Renderer.h"
 #include <vector>
 #include <Windows.h>
-
-struct RenderRect {
-	Scene* scenePtr;
-	int sy, sx, ey, ex;
-};
-
-
-DWORD WINAPI renderPart(LPVOID lpParam)
-{
-	RenderRect *rect = (RenderRect*)lpParam;
-	rect->scenePtr->RenderPart(rect->sy, rect->sx, rect->ey, rect->ex);
-	return 0;
-}
-
-DWORD WINAPI render(LPVOID lpParam)
-{
-	Scene *scene = (Scene*)lpParam;
-	//prepare 4 threads for rendering
-	int h = scene->camera.getHeight();
-	int w = scene->camera.getWidth();
-
-	RenderRect reg1 = { scene, 0,0, h / 2, w / 2 };
-	RenderRect reg2 = { scene, 0, w / 2, h / 2, w };
-	RenderRect reg3 = { scene, h / 2, 0, h, w / 2 };
-	RenderRect reg4 = { scene, h / 2, w / 2, h, w };
-
-	for (int frame = 0; frame < 10; frame++)
-	{
-		//scene->Render();
-		//renderer.DrawCameraBuffer();
-		std::vector<HANDLE> handles;
-	
-		HANDLE hdl = CreateThread(NULL, 0, renderPart, &reg1, 0, 0);
-		handles.push_back(hdl);
-		hdl = CreateThread(NULL, 0, renderPart, &reg2, 0, 0);
-		handles.push_back(hdl);
-		hdl = CreateThread(NULL, 0, renderPart, &reg3, 0, 0);
-		handles.push_back(hdl);
-		hdl = CreateThread(NULL, 0, renderPart, &reg4, 0, 0);
-		handles.push_back(hdl);
-		WaitForMultipleObjects(4, handles.data(), true, INFINITE);
-
-		scene->Update();
-		scene->SaveToPpm("movtest", frame);
-
-	}
-	return 0;
-}
-
-
+#include <SDL.h>
+#include "Renderer.h"
 
 
 int main(int argc, char *args[])
 {
 	Scene defaultScene;
 	defaultScene.InitDefault();
-	SDLCameraRenderer renderer = SDLCameraRenderer(defaultScene.camera);
-	std::getc(stdin);
-	HANDLE hdl = CreateThread(NULL, 0, render, &defaultScene, 0, 0);
-
-	while (true)
+	SDLCameraRenderer sdlPreview(defaultScene.camera);// = SDLCameraRenderer(defaultScene.camera);
+	Renderer renderer(defaultScene);// = Renderer(defaultScene);
+	renderer.RenderMultiThread(8, 8, 2);
+	SDL_Event event;
+	bool KeepRunning = true;
+	bool SomethingHappened = false;
+	while (KeepRunning)
 	{
-		DWORD res = WaitForSingleObject(hdl, 0);
-		renderer.DrawCameraBuffer();
-		if (res == WAIT_OBJECT_0)
+		while (SDL_PollEvent(&event))
 		{
-			break;
-		}
-	}
-	/*for (int frame = 0; frame < 1; frame++)
-	{
-		defaultScene.Render();
-		renderer.DrawCameraBuffer();
-		defaultScene.Update();
-		defaultScene.SaveToPpm("movtest",frame);
-		
-	}*/
-	
-	
+			if (event.type == SDL_KEYDOWN)
+			{
+				switch (event.key.keysym.sym)
+				{
+					case SDLK_ESCAPE:
+					{
+						KeepRunning = false;
+						break;
+					}
+					case SDLK_w:
+					{
+						SomethingHappened = true;
+						defaultScene.camera.pos += defaultScene.camera.transform * Vector(0, 0, 0.5);
+						break;
+					}
+					case SDLK_s:
+					{
+						SomethingHappened = true;
+						defaultScene.camera.pos += defaultScene.camera.transform * Vector(0, 0, -0.5);
+						break;
+					}
+					case SDLK_d:
+					{
+						SomethingHappened = true;
+						defaultScene.camera.pos += defaultScene.camera.transform * Vector(0.5 , 0, 0);
+						break;
+					}
+					case SDLK_a:
+					{
+						SomethingHappened = true;
+						defaultScene.camera.pos += defaultScene.camera.transform * Vector(-0.5, 0, 0);
+						break;
+					}
+					case SDLK_r:
+					{
+						SomethingHappened = true;
+						//defaultScene.camera.pos += defaultScene.camera.transform * Vector(0, 0.5, 0);
+						defaultScene.camera.pos +=  Vector(0, 0.5, 0);
+						break;
+					}
+					case SDLK_f:
+					{
+						SomethingHappened = true;
+						//defaultScene.camera.pos += defaultScene.camera.transform * Vector(0, -0.5, 0);
+						defaultScene.camera.pos += Vector(0, -0.5, 0);
+						break;
+					}
 
-    return 0;
+					case SDLK_UP:
+					{
+						SomethingHappened = true;
+						Vector rot = defaultScene.camera.rot;
+						rot.x += -5.0 / 180 * M_PI;
+						defaultScene.camera.SetRotation(rot);
+						break;
+					}
+					case SDLK_DOWN:
+					{
+						SomethingHappened = true;
+						Vector rot = defaultScene.camera.rot;
+						rot.x += +5.0 / 180 * M_PI;
+						defaultScene.camera.SetRotation(rot);
+						break;
+					}
+					case SDLK_LEFT:
+					{
+						SomethingHappened = true;
+						Vector rot = defaultScene.camera.rot;
+						rot.y += -5.0 / 180 * M_PI;
+						defaultScene.camera.SetRotation(rot);
+						break;
+					}
+					case SDLK_RIGHT:
+					{
+						SomethingHappened = true;
+						Vector rot = defaultScene.camera.rot;
+						rot.y += +5.0 / 180 * M_PI;
+						defaultScene.camera.SetRotation(rot);
+						break;
+					}
+
+				}
+			}
+		}
+
+		if (SomethingHappened && renderer.DoneRendering())
+		{
+			//trigger frame update only if something change and not currently rendering
+			renderer.RenderMultiThread(8, 8, 2);
+			SomethingHappened = false;
+		}
+
+		sdlPreview.DrawCameraBuffer();
+
+	}
+	//wait for renderer to complete;
+
+	while (!renderer.DoneRendering())
+	{
+		sdlPreview.DrawCameraBuffer();
+	}
+
+	return 0;
 }
 

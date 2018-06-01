@@ -24,7 +24,7 @@ void Scene::InitDefault()
 	//PointLight light = PointLight(Vector(1, 4, 1), Vector(1, 1, 1), 50);
 	//lights.push_back(light);
 
-	camera.pos = Vector(0, 0, -2);
+	camera.pos = Vector(0, 0, 0);
 	camera.Setup(SCREEN_HEIGHT, SCREEN_WIDTH, V_FOV, H_FOV);
 	objects.push_back(new Plane(Vector(0, 1, 0), 1, Vector(1, 1, 0)));
 	objects.push_back(new Sphere(Vector(0, 0, 2), 1, Vector(0, 0, 1)));
@@ -37,29 +37,29 @@ bool Scene::Load(char * path)
 	return false;
 }
 
-void Scene::Render()
-{
-	camera.Render(*this);
-}
-
-void Scene::RenderPart(int topY, int topX, int botY, int botX)
-{
-	camera.RenderPart(*this, topY, topX, botY, botX);
-}
-bool Scene::SaveToPpm(char * path)
-{
-	return camera.SavePpm(path);
-}
-
-bool Scene::SaveToPpm(char * path, int frame)
-{
-	return camera.SavePpm(path, frame);
-}
+//void Scene::Render()
+//{
+//	camera.Render(*this);
+//}
+//
+//void Scene::RenderPart(int topY, int topX, int botY, int botX)
+//{
+//	camera.RenderPart(*this, topY, topX, botY, botX);
+//}
+//bool Scene::SaveToPpm(char * path)
+//{
+//	return camera.SavePpm(path);
+//}
+//
+//bool Scene::SaveToPpm(char * path, int frame)
+//{
+//	return camera.SavePpm(path, frame);
+//}
 
 void Scene::Update()
 {
 	//camera.pos = camera.pos + camera.transform * Vector(0, 0, -0.1);
-	camera.pos = camera.pos + Vector(0, 0, -0.5);
+	//camera.pos = camera.pos + Vector(0, 0, -0.5);
 }
 
 Scene::~Scene()

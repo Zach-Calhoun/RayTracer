@@ -11,11 +11,12 @@ public:
 	 int g() const;
 	 int b() const;
 
-	 Vector& operator= (const Vector& v);
+	Vector& operator= (const Vector& v);
 	Vector operator - (Vector v);
 	Vector operator-();
-	Vector operator + (Vector v);
-	double operator * (Vector v);
+	Vector& operator += (Vector& v);
+	Vector operator + (Vector& v);
+	double operator * (Vector& v);
 	static double dot(Vector u, Vector v);
 	Vector operator * (double v);
 	Vector cross(Vector v);

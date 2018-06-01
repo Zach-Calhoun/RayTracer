@@ -48,9 +48,15 @@ double Vector::dist(Vector u, Vector v)
 	return sqrt(dx*dx + dy*dy + dz*dz);
 }
 
-Vector Vector::operator+(Vector v)
+Vector Vector::operator+(Vector& v)
 {
 	return Vector(x + v.x, y + v.y, z + v.z);
+}
+
+Vector& Vector::operator+=(Vector& v)
+{
+	*this = *this + v;
+	return *this;
 }
 
 Vector Vector::operator-(Vector v)
@@ -68,7 +74,7 @@ Vector Vector::operator*(double v)
 	return Vector(x*v, y*v, z*v);
 }
 
-double Vector::operator*(Vector v)
+double Vector::operator*(Vector& v)
 {
 	return x*v.x + y*v.y + z * v.z;
 	//return Vector(x*v.x, y*v.y, z*v.z);

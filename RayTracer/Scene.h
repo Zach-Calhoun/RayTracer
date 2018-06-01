@@ -1,5 +1,6 @@
 #pragma once
 #include "Primitives.h"
+#include "Camera.h"
 #include "Light.h"
 #include <vector>
 #include "config.h"
@@ -15,10 +16,10 @@ public:
 	~Scene();
 	void InitDefault();
 	bool Load(char * path);
-	void Render();
-	void RenderPart(int topY, int topX, int botY, int botX);
+	//void Render();
+	//void RenderPart(int topY, int topX, int botY, int botX);
 	//void Render(int frame);
 	void Update();
-	bool SaveToPpm(char * path);
-	bool SaveToPpm(char *, int frame);
+	//bool SaveToPpm(char * path);
+	//bool SaveToPpm(char *, int frame);
 };
