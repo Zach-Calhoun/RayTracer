@@ -1,4 +1,7 @@
 #include "Scene.h"
+#define _USE_MATH_DEFINES 1
+#include <math.h>
+
 Scene::Scene()
 {
 
@@ -23,12 +26,23 @@ void Scene::InitDefault()
 	//PointLight light = PointLight(Vector(1, 4, 1), Vector(1, 1, 1), 50);
 	//lights.push_back(light);
 
-	camera.pos = Vector(0, 0, 4);
-	camera.rot = Vector(0, 3.14, 0);
+	//TODO add factories
+	Mesh* cubeMesh = new Mesh();
+	cubeMesh->InitCube();
+	MeshObject* Cube = new MeshObject(*cubeMesh);
+
+
+
+	camera.pos = Vector(0, 5, 0);
+	camera.rot = Vector(M_PI / 2, 0 , 0);
 	camera.Setup(SCREEN_HEIGHT, SCREEN_WIDTH, V_FOV, H_FOV);
-	objects.push_back(new Plane(Vector(0, 1, 0), 1, Vector(1, 1, 0)));
-	objects.push_back(new Sphere(Vector(0, 0, 2), 1, Vector(0, 0, 1)));
-	PointLight light = PointLight(Vector(0, 0, 4), Vector(1, 1, 1), 50);
+	objects.push_back(new Plane(Vector(0, 1, 0), 1, Vector(1, 1, 0.001)));
+	objects.push_back(new Sphere(Vector(0, 0, 2), 1, Vector(0.2, 0.2, 1)));
+	objects.push_back(new Sphere(Vector(0, 0, -2), 1, Vector(1, .2, .2)));
+	objects.push_back(new Sphere(Vector(2, 0, 0), 1, Vector(.2, 1, .2)));
+	objects.push_back(new Sphere(Vector(-2, 0, 0), 1, Vector(.05, .05, 1)));
+	objects.push_back(Cube);
+	PointLight light = PointLight(Vector(0, 0, 0), Vector(1, 1, 1), 50);
 	lights.push_back(light);
 }
 

@@ -1,5 +1,7 @@
 #pragma once
 #include "Primitives.h"
+#include "Mesh.h"
+#include "MeshObject.h"
 #include "Camera.h"
 #include "Light.h"
 #include <vector>

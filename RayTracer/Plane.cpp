@@ -25,18 +25,27 @@ Intersection Plane::Trace(Ray& r)
 		//intersection exists
 		Vector planePoint = -normal * distance;
 		Vector rayToPlane = planePoint - r.origin;
-		double dist = rayToPlane * normal / dot;
-		//double dist = rayToPlane * normal / (rayToPlane.normalized() * normal);
-		if (dist < 0) {
-			return Intersection();
-		}
-		//dist = abs(dist);
-		Vector hit = r.origin + (r.direction * dist);
+		double dist = rayToPlane * -normal;
+		//Vector nearestPointToRayOrigin = -normal * dist;
+		Vector hit = r.origin +( r.direction * dist * (-1.0 / dot));
 		Intersection result = Intersection();
 		result.success = true;
 		result.hit = hit;
 		result.color = color;
 		result.normal = normal;
 		return result;
+		//double dist = rayToPlane * normal / dot;
+		////double dist = rayToPlane * normal / (rayToPlane.normalized() * normal);
+		//if (dist < 0) {
+		//	return Intersection();
+		//}
+		////dist = abs(dist);
+		//Vector hit = r.origin + (r.direction * dist);
+		//Intersection result = Intersection();
+		//result.success = true;
+		//result.hit = hit;
+		//result.color = color;
+		//result.normal = normal;
+		//return result;
 	}
 }

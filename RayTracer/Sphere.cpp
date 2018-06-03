@@ -43,11 +43,13 @@ Intersection Sphere::Trace(Ray& r)
 			double distToHit = 0;
 			if (rayToSphere.length() > radius)
 			{
-				distToHit = (scp - r.origin).length() - dist;
+				//distToHit = (scp - r.origin).length() - dist;
+				distToHit = (scp).length() - dist;
 			}
 			else
 			{
-				distToHit = (scp - r.origin).length() + dist;
+				distToHit = (scp).length() + dist;
+				//distToHit = (scp - r.origin).length() + dist;
 			}
 
 			Vector hit = r.origin + (r.direction * distToHit);

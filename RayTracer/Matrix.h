@@ -1,5 +1,8 @@
 #pragma once
-#include "Vector.h"
+#include <fstream>
+#include <iostream>
+//#include "Vector.h"
+class Vector;
 
 class Matrix
 {
@@ -20,6 +23,16 @@ public:
 	Matrix& rotateX(double ang);
 	Matrix& rotateY(double ang);
 	Matrix& rotateZ(double ang);
+	Matrix& rotate(double x, double y, double z);
+	Matrix& rotate(Vector r);
+
+	Matrix& translateX(double t);
+	Matrix& translateY(double t);
+	Matrix& translateZ(double t);
+	Matrix& translate(double x, double y, double z);
+	Matrix& translate(Vector p);
+
+	Vector AsVector();
 
 	Matrix& invert();
 	void Release();
@@ -27,12 +40,16 @@ public:
 	static Matrix RotationX(double ang);
 	static Matrix RotationY(double ang);
 	static Matrix RotationZ(double ang);
+	static Matrix Rotation(double x, double y, double z);
+	static Matrix Rotation(Vector r);
+
 	
 
 	static Matrix TranslationX(double deltaX);
 	static Matrix TranslationY(double deltaY);
 	static Matrix TranslationZ(double deltaZ);
 	static Matrix Translation(double x, double y, double z);
+	static Matrix Translation(Vector p);
 
 
 	static Matrix ScaleX(double s);

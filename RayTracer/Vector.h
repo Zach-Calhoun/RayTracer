@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "Matrix.h"
 class Vector 
 {
 public:
@@ -22,6 +23,9 @@ public:
 	Vector cross(Vector v);
 	static Vector cross(Vector u, Vector v);
 	Vector blend(Vector v);
+
+	Matrix& AsDirection();
+	Matrix& AsPosition();
 	
 	friend std::ofstream& operator<<(std::ofstream& ofs, const Vector& v);
 

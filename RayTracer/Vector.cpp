@@ -151,3 +151,22 @@ Vector Vector::blend(Vector v)
 	return Vector(x*v.x, y * v.y, z * v.z);
 }
 
+Matrix& Vector::AsDirection()
+{
+	Matrix mat = Matrix(4, 1);
+	mat[0][0] = x;
+	mat[0][1] = y;
+	mat[0][2] = z;
+	mat[0][3] = 0;
+	return mat;
+}
+
+Matrix& Vector::AsPosition()
+{
+	Matrix mat = Matrix(4, 1);
+	mat[0][0] = x;
+	mat[0][1] = y;
+	mat[0][2] = z;
+	mat[0][3] = 1;
+	return mat;
+}

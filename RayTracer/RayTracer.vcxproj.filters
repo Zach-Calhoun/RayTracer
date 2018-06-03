@@ -39,6 +39,12 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshObject.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -72,6 +78,12 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshObject.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

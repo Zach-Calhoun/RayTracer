@@ -14,15 +14,15 @@
 #include <SDL.h>
 #include "Renderer.h"
 
-
+#define NUM_THREADS 1
 int main(int argc, char *args[])
 {
 	Scene defaultScene;
 	defaultScene.InitDefault();
 	SDLCameraRenderer sdlPreview(defaultScene.camera);// = SDLCameraRenderer(defaultScene.camera);
 	Renderer renderer(defaultScene);// = Renderer(defaultScene);
-	renderer.RenderMultiThread(8, 8, 2);
-	renderer.SetRenderMode(SHADELESS | DIFFUSE);
+	renderer.RenderMultiThread(8, 8, NUM_THREADS);
+	renderer.SetRenderMode(SHADELESS | DIFFUSE | SHADOWS);
 	SDL_Event event;
 	bool KeepRunning = true;
 	bool SomethingHappened = false;
@@ -118,7 +118,7 @@ int main(int argc, char *args[])
 		if (SomethingHappened && renderer.DoneRendering())
 		{
 			//trigger frame update only if something change and not currently rendering
-			renderer.RenderMultiThread(8, 8, 2);
+			renderer.RenderMultiThread(8, 8, NUM_THREADS);
 			SomethingHappened = false;
 		}
 

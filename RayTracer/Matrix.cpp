@@ -1,4 +1,5 @@
 #include "Matrix.h"
+#include "Vector.h"
 #include <iostream>
 Matrix::Matrix()
 {
@@ -86,6 +87,8 @@ Matrix& Matrix::SetIdentity()
 	return *this;
 }
 
+
+
 Matrix& Matrix::rotateX(double ang)
 {
 	Matrix rot = Matrix::RotationX(ang);
@@ -140,6 +143,108 @@ Matrix Matrix::RotationZ(double ang)
 	return rot;
 }
 
+
+
+Matrix Matrix::Rotation(Vector r)
+{
+	return Matrix::Rotation(r.x, r.y, r.z);
+}
+
+Matrix Matrix::Rotation(double x, double y, double z)
+{
+	Matrix newRot = Matrix::Identity();
+	newRot.rotateX(x);
+	newRot.rotateY(y);
+	newRot.rotateZ(z);
+	return newRot;
+}
+
+Matrix& Matrix::rotate(Vector r)
+{
+	return rotate(r.x, r.y,r.z);
+}
+
+Matrix& Matrix::rotate(double x, double y, double z)
+{
+	Matrix rot = Matrix::Rotation(x, y, z);
+	*this = rot * (*this);
+	rot.Release();
+	return *this;
+}
+
+Matrix Matrix::TranslationX(double deltaX)
+{
+	Matrix tran = Matrix::Identity();
+	tran[0][3] = deltaX;
+	return tran;
+}
+
+Matrix& Matrix::translateX(double t)
+{
+	Matrix tran = Matrix::TranslationX(t);
+	*this = tran * (*this);
+	tran.Release();
+	return *this;
+}
+
+Matrix Matrix::TranslationY(double deltaY)
+{
+	Matrix tran = Matrix::Identity();
+	tran[1][3] = deltaY;
+	return tran;
+}
+
+Matrix& Matrix::translateY(double t)
+{
+	Matrix tran = Matrix::Identity();
+	*this = tran * (*this);
+	tran.Release();
+	return *this;
+}
+
+Matrix Matrix::TranslationZ(double deltaZ)
+{
+	Matrix tran = Matrix::Identity();
+	tran[3][3] = deltaZ;
+	return tran;
+}
+
+Matrix& Matrix::translateZ(double t)
+{
+	Matrix tran = Matrix::Identity();
+	*this = tran * (*this);
+	tran.Release();
+	return *this;
+}
+
+Matrix Matrix::Translation(Vector p)
+{
+	return Matrix::Translation(p.x, p.y, p.z);
+}
+
+Matrix Matrix::Translation(double x, double y, double z)
+{
+	Matrix newT = Matrix::Identity();
+	newT[0][3] = x;
+	newT[1][3] = y;
+	newT[2][3] = z;
+	return newT;
+}
+
+Matrix& Matrix::translate(Vector p)
+{
+	return translate(p.x, p.y, p.z);
+}
+
+Matrix& Matrix::translate(double x, double y, double z)
+{
+	Matrix tran = Matrix::Translation(x, y, z);
+	*this = tran * (*this);
+	tran.Release();
+	return *this;
+}
+
+
 void Matrix::Release()
 {
 	for (int i = 0; i < m; i++)
@@ -147,6 +252,11 @@ void Matrix::Release()
 		delete[] _mat[i];
 	}
 	delete[] _mat;
+}
+
+Vector Matrix::AsVector()
+{
+	return Vector(_mat[0][0], _mat[1][0], _mat[2][0]);
 }
 
 std::ofstream& operator<< (std::ofstream& o,Matrix&  m)

@@ -53,23 +53,24 @@ void Renderer::RenderPart(int topY, int topX, int botY, int botX)
 				RayTraceable* object = objects[k];
 				Intersection tmpHit = r.Trace(*object);
 				if (tmpHit.success) {
-					if (tmpHit.hit.length() < min_dist)
+					double distToHit = r.origin.dist(tmpHit.hit);
+					if (distToHit < min_dist)
 					{
-						min_dist = tmpHit.hit.length();
+						min_dist = distToHit;
 						hit = tmpHit;
 					}
 				}
 			}
 			if (hit.success)
 			{
-#define light scene->lights[0]
+				PointLight* light = &scene->lights[0];
 				//calc basic light
 				double intensity = 0;
 				Vector finalColor = hit.color;
 
 				if (renderMode & DIFFUSE)
 				{
-					Vector lightDir = (light.pos - hit.hit);
+					Vector lightDir = (light->pos - hit.hit);
 					double lightDistance = lightDir.length();
 					//finalColor = hit.color.blend(light.color) * intensity * (light.energy / (lightDistance * lightDistance));
 					intensity = lightDir.normalized() * hit.normal;
@@ -100,7 +101,7 @@ void Renderer::RenderPart(int topY, int topX, int botY, int botX)
 					{
 						intensity = AMBIENT_LEVEL;
 					}
-					finalColor = hit.color.blend(light.color) * intensity * (light.energy / (lightDistance * lightDistance));
+					finalColor = hit.color.blend(light->color) * intensity * (light->energy / (lightDistance * lightDistance));
 					
 				}
 				camera->buffer[i][j] = finalColor;
