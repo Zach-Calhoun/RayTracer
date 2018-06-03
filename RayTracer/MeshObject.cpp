@@ -41,10 +41,12 @@ void MeshObject::SetPos(Vector p)
 
 	Matrix translation = Matrix::Translation(pos);
 	Matrix rotation = Matrix::Rotation(rot);
-	translation.Release();
-	rotation.Release();
+	
 
 	transform = rotation * translation;
+
+	translation.Release();
+	rotation.Release();
 }
 
 void MeshObject::SetRot(Vector r)
@@ -55,10 +57,12 @@ void MeshObject::SetRot(Vector r)
 
 	Matrix translation = Matrix::Translation(pos);
 	Matrix rotation = Matrix::Rotation(rot);
+	
+	transform = rotation * translation;
+
 	translation.Release();
 	rotation.Release();
 
-	transform = rotation * translation;
 }
 
 Vector MeshObject::GetPos()

@@ -22,7 +22,8 @@ int main(int argc, char *args[])
 	SDLCameraRenderer sdlPreview(defaultScene.camera);// = SDLCameraRenderer(defaultScene.camera);
 	Renderer renderer(defaultScene);// = Renderer(defaultScene);
 	renderer.RenderMultiThread(8, 8, NUM_THREADS);
-	renderer.SetRenderMode(SHADELESS | DIFFUSE | SHADOWS);
+	//renderer.SetRenderMode(SHADELESS | DIFFUSE | SHADOWS);
+	renderer.SetRenderMode(SHADELESS);
 	SDL_Event event;
 	bool KeepRunning = true;
 	bool SomethingHappened = false;

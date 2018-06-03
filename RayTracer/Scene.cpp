@@ -30,6 +30,7 @@ void Scene::InitDefault()
 	Mesh* cubeMesh = new Mesh();
 	cubeMesh->InitCube();
 	MeshObject* Cube = new MeshObject(*cubeMesh);
+	Cube->SetPos(6, 0, 6);
 
 
 

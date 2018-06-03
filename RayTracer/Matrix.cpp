@@ -27,7 +27,7 @@ Matrix Matrix::operator*(const Matrix& mat)
 	if (n != mat.m)
 		throw - 1;
 
-	Matrix result = Matrix(m, mat.n);
+	Matrix result(m, mat.n);
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < mat.n; j++)
