@@ -88,8 +88,8 @@ double Vector::dot(Vector u, Vector v)
 Vector Vector::cross(Vector v)
 {
 	double cx = y*v.z - z*v.y;
-	double cy = x*v.z - z*v.x;
-	double cz = x*v.y - y*v.z;
+	double cy = z*v.x - x*v.z;
+	double cz = x*v.y - y*v.x;
 	return Vector(cx, cy, cz);
 }
 
@@ -155,9 +155,9 @@ Matrix& Vector::AsDirection()
 {
 	Matrix mat = Matrix(4, 1);
 	mat[0][0] = x;
-	mat[0][1] = y;
-	mat[0][2] = z;
-	mat[0][3] = 0;
+	mat[1][0] = y;
+	mat[2][0] = z;
+	mat[3][0] = 0;
 	return mat;
 }
 
@@ -165,8 +165,8 @@ Matrix& Vector::AsPosition()
 {
 	Matrix mat = Matrix(4, 1);
 	mat[0][0] = x;
-	mat[0][1] = y;
-	mat[0][2] = z;
-	mat[0][3] = 1;
+	mat[1][0] = y;
+	mat[2][0] = z;
+	mat[3][0] = 1;
 	return mat;
 }

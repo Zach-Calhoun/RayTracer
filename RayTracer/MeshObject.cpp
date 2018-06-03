@@ -84,6 +84,7 @@ Intersection MeshObject::Trace(Ray& r)
 		Intersection result = mesh->Trace(r, transform);
 		//transform mesh
 		result.color = color;
+		return result;
 		//cast tris
 	}
 	else 

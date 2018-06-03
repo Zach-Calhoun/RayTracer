@@ -49,46 +49,66 @@ void Mesh::InitCube()
 	vertices[7] = Vector(-0.5, -0.5, 0.5);
 	
 	faceIndices[0] = 0;
-	faceIndices[1] = 1;
-	faceIndices[2] = 2;
-	faceIndices[3] = 2;
+	faceIndices[1] = 2;
+	faceIndices[2] = 1;
+	faceIndices[3] = 0;
 	faceIndices[4] = 3;
-	faceIndices[5] = 1;
+	faceIndices[5] = 2;
 
-	faceIndices[6] = 2;
-	faceIndices[7] = 1;
-	faceIndices[8] = 5;
-	faceIndices[9] = 2;
-	faceIndices[10] = 5;
-	faceIndices[11] = 6;
+	faceIndices[6] = 1;
+	faceIndices[7] = 2;
+	faceIndices[8] = 6;
+	faceIndices[9] = 1;
+	faceIndices[10] = 6;
+	faceIndices[11] = 5;
 
 	faceIndices[12] = 2;
 	faceIndices[13] = 3;
 	faceIndices[14] = 6;
 	faceIndices[15] = 6;
 	faceIndices[16] = 3;
-	faceIndices[17] = 1;
+	faceIndices[17] = 7;
 
 	faceIndices[18] = 3;
 	faceIndices[19] = 0;
-	faceIndices[20] = 4;
-	faceIndices[21] = 3;
+	faceIndices[20] = 7;
+	faceIndices[21] = 0;
 	faceIndices[22] = 4;
 	faceIndices[23] = 7;
 
 	faceIndices[24] = 0;
-	faceIndices[25] = 4;
-	faceIndices[26] = 1;
-	faceIndices[27] = 1;
-	faceIndices[28] = 4;
+	faceIndices[25] = 1;
+	faceIndices[26] = 4;
+	faceIndices[27] = 4;
+	faceIndices[28] = 1;
 	faceIndices[29] = 5;
 
-	faceIndices[30] = 5;
-	faceIndices[31] = 4;
+	faceIndices[30] = 4;
+	faceIndices[31] = 5;
 	faceIndices[32] = 7;
 	faceIndices[33] = 5;
 	faceIndices[34] = 7;
 	faceIndices[35] = 6;
+
+	CalcNormals();
+	CalculateRadius();
+}
+
+void Mesh::InitTriangle()
+{
+	numVertices = 3;
+	vertices = new Vector[numVertices];
+	numTris =1;
+	faceIndices = new int[numTris*vertsPerFace];
+
+	vertices[0] = Vector(-5, 0, 5);
+	vertices[1] = Vector(5,0,5);
+	vertices[2] = Vector(-5, 0, -5);
+
+	faceIndices[0] = 0;
+	faceIndices[1] = 1;
+	faceIndices[2] = 2;
+
 
 	CalcNormals();
 	CalculateRadius();
@@ -99,7 +119,14 @@ void Mesh::CalcNormals()
 	normals = new Vector[numTris];
 	for (int i = 0; i < numTris; i++)
 	{
-		normals[i] = (vertices[i*vertsPerFace + 1] - vertices[i*vertsPerFace]).cross((vertices[i*vertsPerFace + 2] - vertices[i*vertsPerFace]));
+		int offset = i * vertsPerFace;
+		Vector v1 = vertices[faceIndices[offset]];
+		Vector v2 = vertices[faceIndices[offset + 1]];
+		Vector v3 = vertices[faceIndices[offset + 2]];
+		Vector e1 = v2 - v1;
+		Vector e2 = v3 - v1;
+
+		normals[i] = e1.cross(e2).normalized();
 	}
 }
 
@@ -138,8 +165,9 @@ Intersection Mesh::Trace(Ray& ray, Matrix& transform)
 		//TODO Cache some of theese
 		Matrix normDir = normals[i].AsDirection();
 		Matrix transformedNormal = transform * normDir;
-		//normDir.Release();
+		normDir.Release();
 		Vector normal = transformedNormal.AsVector();
+		transformedNormal.Release();
 
 		if (normal * ray.direction > 0)
 		{
@@ -150,9 +178,9 @@ Intersection Mesh::Trace(Ray& ray, Matrix& transform)
 		{
 			//possible collision
 			int vOffset = i * vertsPerFace;
-			Vector v1 = vertices[vOffset];
-			Vector v2 = vertices[vOffset + 1];
-			Vector v3 = vertices[vOffset + 2];
+			Vector v1 = vertices[faceIndices[vOffset]];
+			Vector v2 = vertices[faceIndices[vOffset + 1]];
+			Vector v3 = vertices[faceIndices[vOffset + 2]];
 			Vector edge1, edge2, h, s, q;
 			double a, f, u, v;
 			edge1 = v2 - v1;
@@ -184,8 +212,11 @@ Intersection Mesh::Trace(Ray& ray, Matrix& transform)
 				tmpHit.success = true;
 				tmpHit.normal = normal;
 				//handle color?
-				if (ray.origin.dist(tmpHit.hit) < minDist)
+				double hitDist = ray.origin.dist(tmpHit.hit);
+				if (hitDist < minDist)
 				{
+
+					minDist = hitDist;
 					result = tmpHit;
 				}
 			}

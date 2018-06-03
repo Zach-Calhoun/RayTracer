@@ -24,6 +24,7 @@ public:
 	void SetData(int numVerts, int numFaces, Vector * verts, int* faces);
 	void LoadData(char * path);
 	void InitCube();
+	void InitTriangle();
 	void Clear();
 
 	double getRadius();

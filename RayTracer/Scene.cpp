@@ -27,11 +27,15 @@ void Scene::InitDefault()
 	//lights.push_back(light);
 
 	//TODO add factories
+
 	Mesh* cubeMesh = new Mesh();
 	cubeMesh->InitCube();
 	MeshObject* Cube = new MeshObject(*cubeMesh);
-	Cube->SetPos(6, 0, 6);
+	Cube->SetPos(4, 0, 4);
 
+	/*Mesh* triMesh = new Mesh();
+	triMesh->InitTriangle();
+	MeshObject* Triangle = new MeshObject(*triMesh);*/
 
 
 	camera.pos = Vector(0, 5, 0);
@@ -43,7 +47,8 @@ void Scene::InitDefault()
 	objects.push_back(new Sphere(Vector(2, 0, 0), 1, Vector(.2, 1, .2)));
 	objects.push_back(new Sphere(Vector(-2, 0, 0), 1, Vector(.05, .05, 1)));
 	objects.push_back(Cube);
-	PointLight light = PointLight(Vector(0, 0, 0), Vector(1, 1, 1), 50);
+	//objects.push_back(Triangle);
+	PointLight light = PointLight(Vector(0, 4, 0), Vector(1, 1, 1), 50);
 	lights.push_back(light);
 }
 
