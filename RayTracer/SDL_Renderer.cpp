@@ -1,6 +1,5 @@
 #include "SDL_Renderer.h"
 #include "config.h"
-#include "Primitives.h"
 #include <iostream>
 
 SDLCameraRenderer::SDLCameraRenderer()

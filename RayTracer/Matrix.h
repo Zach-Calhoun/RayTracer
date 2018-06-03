@@ -16,7 +16,7 @@ public:
 	static Matrix Identity();
 	Matrix& SetIdentity();
 
-	Matrix operator*(const Matrix& mat);
+	Matrix operator*(const Matrix& mat) const;
 	Vector operator*(const Vector& v);
 	double* operator[](int i);
 	

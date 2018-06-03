@@ -1,7 +1,6 @@
 #pragma once
 #include <SDL.h>
 #include "Vector.h"
-#include "Primitives.h"
 #include "Camera.h"
 class SDLCameraRenderer
 {

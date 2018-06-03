@@ -1,11 +1,13 @@
 #pragma once
-#include "Primitives.h"
 #include "Mesh.h"
 #include "MeshObject.h"
 #include "Camera.h"
 #include "Light.h"
 #include <vector>
 #include "config.h"
+#include "Material.h"
+#include "Plane.h"
+#include "Sphere.h"
 class Scene
 {
 public:
@@ -13,6 +15,7 @@ public:
 	std::vector<RayTraceable*> objects;
 	std::vector<PointLight> lights;
 	//
+	MeshObject* animated;
 
 	Scene();
 	~Scene();

@@ -1,12 +1,24 @@
 #include "Renderer.h"
+#include "Shader.h"
 #include <queue>
 Renderer::Renderer()
 {
+	curFrame = 0;
+	horizontalDivisions = 1;
+	verticalDivisions = 1;
+	numThreads = 1;
+}
 
+void Renderer::Config(int horDivs, int verDivs, int maxThreads)
+{
+	horizontalDivisions = horDivs;
+	verticalDivisions = verDivs;
+	numThreads = maxThreads;
 }
 
 Renderer::Renderer(Scene& scene)
 {
+	curFrame = 0;
 	mainRenderThreadHandle = NULL;
 	h = scene.camera.getHeight();
 	w = scene.camera.getWidth();
@@ -27,6 +39,14 @@ void Renderer::SetScene(Scene& scene)
 	SetCamera(scene.camera);
 }
 
+void Renderer::NextFrame()
+{
+	curFrame++;
+	scene->Update();
+	RenderMultiThread();
+
+}
+
 void Renderer::SetRenderMode(int renderMode)
 {
 	this->renderMode = renderMode;
@@ -39,76 +59,25 @@ void Renderer::RenderFull()
 
 void Renderer::RenderPart(int topY, int topX, int botY, int botX)
 {
-#define objects scene->objects
-
 	for (int i = topY; i < botY; i++)
 	{
 		for (int j = topX; j < botX; j++)
-		{
+		{			
 			Ray r = camera->GenerateRay(i, j);
-			Intersection hit = Intersection();
-			double min_dist = INFINITY;
-			for (int k = 0; k < objects.size(); k++)
-			{
-				RayTraceable* object = objects[k];
-				Intersection tmpHit = r.Trace(*object);
-				if (tmpHit.success) {
-					double distToHit = r.origin.dist(tmpHit.hit);
-					if (distToHit < min_dist)
-					{
-						min_dist = distToHit;
-						hit = tmpHit;
-					}
-				}
-			}
+			Intersection hit = r.TraceObjects(scene->objects);
+
+			
+
 			if (hit.success)
 			{
-				PointLight* light = &scene->lights[0];
-				//calc basic light
-				double intensity = 0;
-				Vector finalColor = hit.color;
-
-				if (renderMode & DIFFUSE)
+				if (renderMode & REFLECTIONS)
 				{
-					Vector lightDir = (light->pos - hit.hit);
-					double lightDistance = lightDir.length();
-					//finalColor = hit.color.blend(light.color) * intensity * (light.energy / (lightDistance * lightDistance));
-					intensity = lightDir.normalized() * hit.normal;
-					if (renderMode & SHADOWS)
-					{
-						Ray shadowRay = Ray(hit.hit, lightDir.normalized());
-						//add small forward to prevent self collison
-						shadowRay.origin = shadowRay.origin + (lightDir.normalized() * 0.0001);
-						Intersection shadowHit = Intersection();
-						for (int l = 0; l < objects.size(); l++)
-						{
-							shadowHit = shadowRay.Trace(*objects[l]);
-							if (shadowHit.success && (shadowRay.origin.dist(shadowHit.hit)) < lightDistance)
-							{
-								break;
-							}
-						}
 
-
-						if (shadowHit.success && (shadowRay.origin.dist(shadowHit.hit)) < lightDistance)
-						{
-							intensity = AMBIENT_LEVEL;
-						}
-						
-					}
-
-					if (intensity < AMBIENT_LEVEL)
-					{
-						intensity = AMBIENT_LEVEL;
-					}
-					finalColor = hit.color.blend(light->color) * intensity * (light->energy / (lightDistance * lightDistance));
-					
 				}
-				camera->buffer[i][j] = finalColor;
-				//= r.Trace(sp);
-
-				//Ray r = Ray(); //defaults to world origin and forward direction ( +z )
-				//std::cout << "Y: " << i << " X: " << j << " " << hit.color.r() << " " << hit.color.g() << " " << hit.color.b() << " " << std::endl;
+				int depth = 0;
+				Vector pixel = Shader::CalculateShading(hit, r,scene, renderMode, depth);
+				
+				camera->buffer[i][j] = pixel;			
 			}
 			else
 			{
@@ -125,6 +94,11 @@ void Renderer::RenderSingleThread()
 	//setupRenderThreads()
 	//RenderFull();
 	RenderMultiThread(1, 1);
+}
+
+void Renderer::RenderMultiThread()
+{
+	RenderMultiThread(horizontalDivisions, verticalDivisions, numThreads);
 }
 
 void Renderer::RenderMultiThread(int horDivs, int verDivs, int maxThreads)
@@ -193,7 +167,7 @@ DWORD Renderer::setupRenderThreads(LPVOID param)
 	int w = scene->camera.getWidth();
 
 	int rectH = h / divs->verticalDivs;
-	int rectW = h / divs->horizontalDivs;
+	int rectW = w / divs->horizontalDivs;
 
 	int numRegions = divs->verticalDivs * divs->horizontalDivs;
 
@@ -232,28 +206,10 @@ DWORD Renderer::setupRenderThreads(LPVOID param)
 			currentRunningThreads--;
 		}
 	}
-	//for (int threadBatch = 0; threadBatch < numRegions; threadBatch += divs->maxThreads)
-	//{
-	//	
-	//	handles.clear();
-	//	for (int i = 0; i < paralelThreads; i++)
-	//	{
-	//		
-	//	}
 
-	//	while (true)
-	//	{
-	//		//waiting with infinite timeout causes delay between batches
-	//		DWORD sync = WaitForMultipleObjects(4, handles.data(), true, 0);
-	//		if (sync == WAIT_OBJECT_0)
-	//		{
-	//			break;
-	//		}
-	//	}
-	//	
-	//	scene->camera.SavePpm("multi_thread_test.ppm");
-	//}
 	delete divs;
+	//scene->camera.SavePpm("testAnim01", curFrame);
+	mainRenderThreadHandle = NULL;
 	return 0;
 }
 

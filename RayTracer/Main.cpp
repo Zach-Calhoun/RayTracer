@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 #include "config.h"
-#include "Primitives.h"
 #include "Light.h"
 #include <fstream>
 #include <vector>
@@ -21,12 +20,15 @@ int main(int argc, char *args[])
 	defaultScene.InitDefault();
 	SDLCameraRenderer sdlPreview(defaultScene.camera);// = SDLCameraRenderer(defaultScene.camera);
 	Renderer renderer(defaultScene);// = Renderer(defaultScene);
-	renderer.RenderMultiThread(8, 8, NUM_THREADS);
-	renderer.SetRenderMode(SHADELESS | DIFFUSE | SHADOWS);
+	renderer.Config(8, 8, NUM_THREADS);
+	renderer.RenderMultiThread();
+	renderer.SetRenderMode(SHADELESS | DIFFUSE | SPECULAR |SHADOWS | REFLECTIONS);
 	//renderer.SetRenderMode(SHADELESS);
 	SDL_Event event;
 	bool KeepRunning = true;
 	bool SomethingHappened = false;
+	bool Animate = false;
+
 	while (KeepRunning)
 	{
 		while (SDL_PollEvent(&event))
@@ -116,10 +118,17 @@ int main(int argc, char *args[])
 			}
 		}
 
-		if (SomethingHappened && renderer.DoneRendering())
+		//if(renderer.DoneRendering)
+		if (renderer.DoneRendering() && Animate)
+		{
+			renderer.NextFrame();
+		}
+
+		if (SomethingHappened && renderer.DoneRendering() && !Animate)
 		{
 			//trigger frame update only if something change and not currently rendering
-			renderer.RenderMultiThread(8, 8, NUM_THREADS);
+			//renderer.RenderMultiThread(8, 8, NUM_THREADS);
+			renderer.RenderMultiThread();
 			SomethingHappened = false;
 		}
 

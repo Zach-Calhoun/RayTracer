@@ -1,6 +1,5 @@
 #pragma once
 #include "Scene.h"
-#include "Primitives.h"
 #include "Camera.h"
 #include <Windows.h>
 
@@ -22,8 +21,14 @@ class Renderer
 private:
 	int h, w;
 	int renderMode;
+
+	int numThreads;
+	int horizontalDivisions;
+	int verticalDivisions;
+
 	void RenderFull();
 	void RenderPart(int topY, int topX, int botY, int botX);
+	void RenderMultiThread(int horDivs, int verDivs, int maxThreads = 4);
 
 	HANDLE mainRenderThreadHandle;
 
@@ -35,17 +40,20 @@ private:
 public:
 	Scene* scene;
 	Camera* camera;
+	int curFrame;
 
 	Renderer();
 	Renderer(Scene& scene);
 	~Renderer();
 
+	void NextFrame();
 	void SetCamera(Camera& camera);
 	void SetScene(Scene& scene);
 	void SetRenderMode(int mode);
+	void Config(int horDivs, int verDivs, int maxThreads = 4);
 
 	void RenderSingleThread();
-	void RenderMultiThread(int horDivs, int verDivs, int maxThreads = 4);
+	void RenderMultiThread();
 
 	bool DoneRendering();
 

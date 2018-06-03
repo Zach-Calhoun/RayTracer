@@ -1,8 +1,9 @@
-#include "Primitives.h"
+
 #include "Camera.h"
 #include "Scene.h"
 #include "config.h"
 #define _USE_MATH_DEFINES
+#define _USE_CRT_NO_WARNINGS
 #include <math.h>
 #include <vector>
 

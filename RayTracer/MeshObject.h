@@ -1,18 +1,20 @@
 #pragma once
-#include "Primitives.h"
 #include "Mesh.h"
 
 //inherit sphere because early escape logic will be based on sphere tracing
 class MeshObject : public Sphere
 {
 private:
-	Mesh * mesh;
+	Mesh * originalMesh;
+	Mesh * transformedMesh;
 	Matrix transform;
 	Vector pos;
 	Vector rot;
+
+	void ApplyTransformation();
 public:
 	MeshObject();
-	MeshObject(Mesh& meshData);
+	MeshObject(Mesh& meshData, Material m = Material(Vector(0.5,0.5,0.5)));
 	~MeshObject();
 
 	void SetMesh(Mesh& meshData);

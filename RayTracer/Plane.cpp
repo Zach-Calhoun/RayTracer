@@ -1,4 +1,5 @@
-#include "Primitives.h"
+#include "Plane.h"
+
 Plane::Plane()
 {
 	normal = Vector(0, 1, 0);
@@ -6,11 +7,11 @@ Plane::Plane()
 	//Plane
 }
 
-Plane::Plane(Vector n, double d, Vector c)
+Plane::Plane(Vector n, double d, Material m)
 {
 	normal = n.normalize();
 	distance = d;
-	color = c;
+	mat = m;
 }
 Intersection Plane::Trace(Ray& r)
 {
@@ -31,7 +32,7 @@ Intersection Plane::Trace(Ray& r)
 		Intersection result = Intersection();
 		result.success = true;
 		result.hit = hit;
-		result.color = color;
+		result.matInfo = mat.GetMatInfo();
 		result.normal = normal;
 		return result;
 		//double dist = rayToPlane * normal / dot;

@@ -1,17 +1,17 @@
-#include "Primitives.h"
+#include "Sphere.h"
 
 Sphere::Sphere()
 {
 	origin = Vector();
 	radius = 10;
-	color = Vector(1, 0, 0);
+	//color = Vector(1, 0, 0);
 }
 
-Sphere::Sphere(Vector o, double r, Vector c)
+Sphere::Sphere(Vector o, double r, Material m)
 {
 	origin = o;
 	radius = r;
-	color = c;
+	mat = m;
 }
 
 Intersection Sphere::Trace(Ray& r)
@@ -56,7 +56,7 @@ Intersection Sphere::Trace(Ray& r)
 			Vector norm = hit - origin;
 			norm.normalize();
 			Intersection result = Intersection();
-			result.color = color;
+			result.matInfo = mat.GetMatInfo();
 			result.hit = hit;
 			result.success = true;
 			result.normal = norm;

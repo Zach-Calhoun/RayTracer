@@ -2,12 +2,14 @@
 
 MeshObject::MeshObject()
 {
-	mesh = NULL;
+	originalMesh = NULL;
+	transformedMesh = NULL;
 	transform = Matrix::Identity();
 }
 
-MeshObject::MeshObject(Mesh& meshData)
+MeshObject::MeshObject(Mesh& meshData, Material m)
 {
+	mat = m;
 	transform = Matrix::Identity();
 	SetMesh(meshData);
 }
@@ -15,11 +17,16 @@ MeshObject::MeshObject(Mesh& meshData)
 MeshObject::~MeshObject()
 {
 	transform.Release();
+	//delete originalMesh;
+	delete transformedMesh;
 }
 void MeshObject::SetMesh(Mesh& meshData)
 {
-	mesh = &meshData;
-	radius = mesh->getRadius();
+	//mesh = &meshData;
+	originalMesh = &meshData;
+	transformedMesh = new Mesh(meshData);
+	radius = transformedMesh->getRadius();
+	ApplyTransformation();
 }
 
 void MeshObject::SetPos(double x, double y, double z)
@@ -35,34 +42,32 @@ void MeshObject::SetRot(double x, double y, double z)
 void MeshObject::SetPos(Vector p)
 {
 	pos = p;
-	//rot then pos;
-	transform.Release();
-	transform = Matrix::Identity();
-
-	Matrix translation = Matrix::Translation(pos);
-	Matrix rotation = Matrix::Rotation(rot);
-	
-
-	transform = rotation * translation;
-
-	translation.Release();
-	rotation.Release();
+	origin = p;
+	ApplyTransformation();
 }
 
 void MeshObject::SetRot(Vector r)
 {
 	rot = r;
+	ApplyTransformation();
+
+}
+
+void MeshObject::ApplyTransformation()
+{
 	transform.Release();
 	transform = Matrix::Identity();
 
 	Matrix translation = Matrix::Translation(pos);
 	Matrix rotation = Matrix::Rotation(rot);
-	
-	transform = rotation * translation;
+
+	//transform = rotation * transform;
+	transform = translation * rotation;
 
 	translation.Release();
 	rotation.Release();
 
+	transformedMesh->ApplyTransformation(originalMesh, transform);
 }
 
 Vector MeshObject::GetPos()
@@ -81,9 +86,9 @@ Intersection MeshObject::Trace(Ray& r)
 	if (initialTest.success)
 	{
 		//go deeper
-		Intersection result = mesh->Trace(r, transform);
+		Intersection result = transformedMesh->Trace(r, transform);
 		//transform mesh
-		result.color = color;
+		result.matInfo = mat.GetMatInfo();
 		return result;
 		//cast tris
 	}

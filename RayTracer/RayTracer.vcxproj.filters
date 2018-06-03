@@ -3,63 +3,60 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="Camera.cpp">
-      <Filter>Sources\Primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="Sphere.cpp">
-      <Filter>Sources\Primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitives.cpp">
-      <Filter>Sources\Primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Sources\Primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="Ray.cpp">
-      <Filter>Sources\Primitives</Filter>
-    </ClCompile>
     <ClCompile Include="Vector.cpp">
-      <Filter>Sources\Operations</Filter>
-    </ClCompile>
-    <ClCompile Include="Intersection.cpp">
-      <Filter>Sources\Primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="Plane.cpp">
-      <Filter>Sources\Primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Sources</Filter>
+      <Filter>Sources\Geometry</Filter>
     </ClCompile>
     <ClCompile Include="Matrix.cpp">
-      <Filter>Sources\Operations</Filter>
+      <Filter>Sources\Geometry</Filter>
     </ClCompile>
-    <ClCompile Include="SDL_Renderer.cpp">
-      <Filter>Sources</Filter>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Sources\Base</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Sources</Filter>
+    <ClCompile Include="Light.cpp">
+      <Filter>Sources\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>Sources\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitives.cpp">
+      <Filter>Sources\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>Sources\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
-      <Filter>Sources</Filter>
+      <Filter>Sources\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Sources\Base</Filter>
     </ClCompile>
     <ClCompile Include="MeshObject.cpp">
-      <Filter>Sources</Filter>
+      <Filter>Sources\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="SDL_Renderer.cpp">
+      <Filter>Sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Sources\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Ray.cpp">
+      <Filter>Sources\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Intersection.cpp">
+      <Filter>Sources\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="RayTraceable.cpp">
+      <Filter>Sources\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Sources\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitives.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
@@ -68,23 +65,53 @@
     <ClInclude Include="stdafx.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Headers</Filter>
+    <ClInclude Include="Camera.h">
+      <Filter>Headers\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Headers\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Headers\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Headers\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="SDL_Renderer.h">
-      <Filter>Headers</Filter>
+      <Filter>Headers\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Headers</Filter>
+    <ClInclude Include="Scene.h">
+      <Filter>Headers\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Headers</Filter>
+    <ClInclude Include="Material.h">
+      <Filter>Headers\Base</Filter>
     </ClInclude>
-    <ClInclude Include="MeshObject.h">
-      <Filter>Headers</Filter>
+    <ClInclude Include="Plane.h">
+      <Filter>Headers\Shapes</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Headers</Filter>
+      <Filter>Headers\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshObject.h">
+      <Filter>Headers\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Headers\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTraceable.h">
+      <Filter>Headers\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Ray.h">
+      <Filter>Headers\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Intersection.h">
+      <Filter>Headers\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Headers\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -100,8 +127,29 @@
     <Filter Include="Sources\Primitives">
       <UniqueIdentifier>{ee438f3b-4bf7-460d-b1b3-f247dc60acbd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Operations">
+    <Filter Include="Headers\Geometry">
+      <UniqueIdentifier>{52789287-e5ee-484b-a458-9737eb22949e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Base">
+      <UniqueIdentifier>{a946e51e-e25f-44a2-ad9b-c9c569adefde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Shapes">
+      <UniqueIdentifier>{96f41dd5-f6ad-45d1-afe0-890f5138ce41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Rendering">
+      <UniqueIdentifier>{e834dad9-f1d5-44fb-bb42-a5a9c529903b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Geometry">
       <UniqueIdentifier>{e69e0815-c1ef-42c8-bc98-45c0c5884d17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Rendering">
+      <UniqueIdentifier>{a28458bc-e9e4-43ed-9742-304ea633a2f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Base">
+      <UniqueIdentifier>{d62d7a8b-bf3f-449c-95f9-2f1c5b20dfc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Shapes">
+      <UniqueIdentifier>{03622f30-988b-403c-aa8a-7ae9dd94da5d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

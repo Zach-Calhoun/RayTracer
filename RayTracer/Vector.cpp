@@ -124,20 +124,20 @@ Vector Vector::normalize()
 
  int Vector::r() const
 {
-	float abv = fabs(x);
-	return fmin(abv * 255,255);
+	double abv = abs(x);
+	return (int)fmin(abv * 255,255);
 }
 
  int Vector::g() const
 {
-	float abv = fabs(y);
-	return fmin(abv * 255, 255);
+	double abv = abs(y);
+	return (int)fmin(abv * 255, 255);
 }
 
 int Vector::b() const
 {
-	float abv = fabs(z);
-	return fmin(abv * 255, 255);
+	double abv = abs(z);
+	return (int)fmin(abv * 255, 255);
 }
 
 std::ofstream& operator<<(std::ofstream& ofs, const Vector& v)

@@ -22,7 +22,7 @@ double* Matrix::operator[](int i)
 	return _mat[i];
 }
 
-Matrix Matrix::operator*(const Matrix& mat)
+Matrix Matrix::operator*(const Matrix& mat) const
 {
 	if (n != mat.m)
 		throw - 1;

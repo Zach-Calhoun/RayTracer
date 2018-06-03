@@ -16,6 +16,27 @@ Mesh::Mesh(int numVerts, int numFaces, Vector* verts, int* faces)
 	SetData(numVerts, numFaces, verts, faces);
 }
 
+Mesh::Mesh(const Mesh& m)
+{
+	*this = m;
+}
+
+Mesh& Mesh::operator=(const Mesh& m)
+{
+	numVertices = m.numVertices;
+	numTris = m.numTris;
+	boundingSphereRadius = m.boundingSphereRadius;
+	vertices = new Vector[numVertices];
+	faceIndices = new int[numTris*vertsPerFace];
+	normals = new Vector[numTris];
+
+
+	memcpy(vertices, m.vertices, numVertices * sizeof(Vector));
+	memcpy(faceIndices, m.faceIndices, numTris*vertsPerFace*sizeof(int));
+	memcpy(normals, m.normals, numTris*sizeof(Vector));
+	return *this;
+}
+
 double Mesh::getRadius()
 {
 	return boundingSphereRadius;
@@ -30,6 +51,29 @@ void Mesh::SetData(int numVerts, int numFaces, Vector * verts, int* faces)
 {
 	CalcNormals();
 	CalculateRadius();
+}
+
+void Mesh::ApplyTransformation(const Mesh* reference, const Matrix& t)
+{
+	//rotate normals
+	for (int i = 0; i < numTris; i++)
+	{
+		Matrix normDir = reference->normals[i].AsDirection();
+		Matrix transformedNormal = t * normDir;
+		normDir.Release();
+		normals[i] = transformedNormal.AsVector();
+		transformedNormal.Release();
+	}
+	//transform vertices
+	for (int i = 0; i < numVertices; i++)
+	{
+		Matrix vPos = reference->vertices[i].AsPosition();
+		Matrix tVert = t * vPos;
+		vPos.Release();
+		vertices[i] = tVert.AsVector();
+		tVert.Release();
+	}
+	
 }
 
 void Mesh::InitCube()
@@ -87,8 +131,8 @@ void Mesh::InitCube()
 	faceIndices[31] = 5;
 	faceIndices[32] = 7;
 	faceIndices[33] = 5;
-	faceIndices[34] = 7;
-	faceIndices[35] = 6;
+	faceIndices[34] = 6;
+	faceIndices[35] = 7;
 
 	CalcNormals();
 	CalculateRadius();
@@ -163,11 +207,12 @@ Intersection Mesh::Trace(Ray& ray, Matrix& transform)
 	{
 		Intersection tmpHit;
 		//TODO Cache some of theese
-		Matrix normDir = normals[i].AsDirection();
+		/*Matrix normDir = normals[i].AsDirection();
 		Matrix transformedNormal = transform * normDir;
 		normDir.Release();
-		Vector normal = transformedNormal.AsVector();
-		transformedNormal.Release();
+		Vector normal = transformedNormal.AsVector();*/
+		//transformedNormal.Release();
+		Vector normal = normals[i];
 
 		if (normal * ray.direction > 0)
 		{

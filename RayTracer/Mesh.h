@@ -1,6 +1,6 @@
 #pragma once
 #include "Vector.h"
-#include "Primitives.h"
+#include "Sphere.h"
 //reprezents 3d vertex data
 class Mesh
 {
@@ -20,7 +20,10 @@ public:
 	Mesh();
 	Mesh(char * path);
 	Mesh(int numVerts, int numFaces, Vector* verts, int* faces);
+	Mesh(const Mesh& m);
+	Mesh& operator=(const Mesh& m);
 
+	void ApplyTransformation(const Mesh* reference, const Matrix& t);
 	void SetData(int numVerts, int numFaces, Vector * verts, int* faces);
 	void LoadData(char * path);
 	void InitCube();
