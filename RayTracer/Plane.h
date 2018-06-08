@@ -9,6 +9,8 @@ public:
 	//Vector color;
 
 	Plane();
-	Plane(Vector n, double d, Material m = Material(Vector(0.5,0.5,0.5)));
+	Plane(Vector n, double d, Material* m = new Material(Vector(0.5,0.5,0.5)));
 	Intersection Trace(Ray& r);
+	Vector GetPos();
+	void SetPos(Vector p);
 };

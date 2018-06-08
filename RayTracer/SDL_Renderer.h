@@ -13,6 +13,7 @@ public:
 	Camera* cameraReference;
 
 	void DrawCameraBuffer();
+	//bool 
 
 	SDLCameraRenderer();
 	SDLCameraRenderer(Camera& camera);

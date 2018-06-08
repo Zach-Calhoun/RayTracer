@@ -20,6 +20,7 @@ public:
 	Scene();
 	~Scene();
 	void InitDefault();
+	void InitAnimScene();
 	bool Load(char * path);
 	//void Render();
 	//void RenderPart(int topY, int topX, int botY, int botX);

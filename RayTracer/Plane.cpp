@@ -7,7 +7,7 @@ Plane::Plane()
 	//Plane
 }
 
-Plane::Plane(Vector n, double d, Material m)
+Plane::Plane(Vector n, double d, Material* m)
 {
 	normal = n.normalize();
 	distance = d;
@@ -27,12 +27,19 @@ Intersection Plane::Trace(Ray& r)
 		Vector planePoint = -normal * distance;
 		Vector rayToPlane = planePoint - r.origin;
 		double dist = rayToPlane * -normal;
+		if (dist < 0)
+		{
+			return Intersection();
+		}
 		//Vector nearestPointToRayOrigin = -normal * dist;
 		Vector hit = r.origin +( r.direction * dist * (-1.0 / dot));
 		Intersection result = Intersection();
 		result.success = true;
 		result.hit = hit;
-		result.matInfo = mat.GetMatInfo();
+		Vector hitToPoint = hit - planePoint;
+		int xProj = hitToPoint.x;
+		int yProj = hitToPoint.z;
+		result.matInfo = mat->GetMatInfo(xProj, yProj);
 		result.normal = normal;
 		return result;
 		//double dist = rayToPlane * normal / dot;
@@ -49,4 +56,13 @@ Intersection Plane::Trace(Ray& r)
 		//result.normal = normal;
 		//return result;
 	}
+}
+
+Vector Plane::GetPos()
+{
+	return Vector();
+}
+void Plane::SetPos(Vector p)
+{
+	return;
 }

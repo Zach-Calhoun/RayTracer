@@ -7,12 +7,19 @@ Sphere::Sphere()
 	//color = Vector(1, 0, 0);
 }
 
-Sphere::Sphere(Vector o, double r, Material m)
+Sphere::Sphere(Vector o, double r, Material* m)
 {
 	origin = o;
 	radius = r;
 	mat = m;
 }
+Sphere::Sphere(Vector o, double r, Vector m)
+{
+	origin = o;
+	radius = r;
+	mat = new Material(m);
+}
+
 
 Intersection Sphere::Trace(Ray& r)
 {
@@ -56,7 +63,8 @@ Intersection Sphere::Trace(Ray& r)
 			Vector norm = hit - origin;
 			norm.normalize();
 			Intersection result = Intersection();
-			result.matInfo = mat.GetMatInfo();
+			//TODO get x y
+			result.matInfo = mat->GetMatInfo();
 			result.hit = hit;
 			result.success = true;
 			result.normal = norm;
@@ -64,4 +72,13 @@ Intersection Sphere::Trace(Ray& r)
 		}
 	}
 
+}
+
+Vector Sphere::GetPos()
+{
+	return origin;
+}
+void Sphere::SetPos(Vector p)
+{
+	origin = p;
 }

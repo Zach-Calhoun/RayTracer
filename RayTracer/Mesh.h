@@ -31,7 +31,7 @@ public:
 	void Clear();
 
 	double getRadius();
-	Intersection Trace(Ray& ray, Matrix& transform);
+	Intersection Trace(Ray& ray, Matrix& transform, double& u, double& v);
 
 	~Mesh();
 };

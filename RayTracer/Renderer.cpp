@@ -70,10 +70,6 @@ void Renderer::RenderPart(int topY, int topX, int botY, int botX)
 
 			if (hit.success)
 			{
-				if (renderMode & REFLECTIONS)
-				{
-
-				}
 				int depth = 0;
 				Vector pixel = Shader::CalculateShading(hit, r,scene, renderMode, depth);
 				
@@ -208,7 +204,7 @@ DWORD Renderer::setupRenderThreads(LPVOID param)
 	}
 
 	delete divs;
-	//scene->camera.SavePpm("testAnim01", curFrame);
+	scene->camera.SavePpm("testAnim02", curFrame);
 	mainRenderThreadHandle = NULL;
 	return 0;
 }

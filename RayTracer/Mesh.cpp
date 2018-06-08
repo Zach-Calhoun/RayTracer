@@ -43,7 +43,36 @@ double Mesh::getRadius()
 }
 void Mesh::LoadData(char * path)
 {
-	CalcNormals();
+	ifstream inputFile(path);
+	inputFile >> numVertices;
+	inputFile >> numTris;
+	vertices = new Vector[numVertices];
+	faceIndices = new int[numTris * vertsPerFace];
+	normals = new Vector[numTris];
+	//read vertices
+	for (int i = 0; i < numVertices; i++)
+	{
+		double x, y, z;
+		inputFile >> x;
+		inputFile >> y;
+		inputFile >> z;
+		vertices[i] = Vector(x, y, z);
+	}
+	//read normals
+	for (int i = 0; i < numTris; i++)
+	{
+		double x, y, z;
+		inputFile >> x;
+		inputFile >> y;
+		inputFile >> z;
+		normals[i] = Vector(x, y, z);
+	}
+	for (int i = 0; i < numTris * vertsPerFace; i++)
+	{
+		inputFile >> faceIndices[i];
+	}
+
+	//CalcNormals();
 	CalculateRadius();
 }
 
@@ -197,7 +226,7 @@ void Mesh::CalculateRadius()
 	
 }
 
-Intersection Mesh::Trace(Ray& ray, Matrix& transform)
+Intersection Mesh::Trace(Ray& ray, Matrix& transform, double& u, double& v)
 {
 	//iterate over all traingles and return the shortes length
 	Intersection result;
@@ -227,7 +256,7 @@ Intersection Mesh::Trace(Ray& ray, Matrix& transform)
 			Vector v2 = vertices[faceIndices[vOffset + 1]];
 			Vector v3 = vertices[faceIndices[vOffset + 2]];
 			Vector edge1, edge2, h, s, q;
-			double a, f, u, v;
+			double a, f;
 			edge1 = v2 - v1;
 			edge2 = v3 - v1;
 			h = ray.direction.cross(edge2);

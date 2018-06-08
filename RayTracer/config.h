@@ -1,7 +1,9 @@
 #pragma once
-
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 780
+//
+//#define SCREEN_WIDTH 1280
+//#define SCREEN_HEIGHT 780
+#define SCREEN_WIDTH 427
+#define SCREEN_HEIGHT 260
 #define MAX_REFLECTION_DEPTH 4
 
 enum RenderModes { SHADELESS = 1, DIFFUSE = 2, SPECULAR = 4, SHADOWS = 8, REFLECTIONS = 16 };

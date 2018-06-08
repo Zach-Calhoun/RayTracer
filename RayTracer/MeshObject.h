@@ -14,7 +14,7 @@ private:
 	void ApplyTransformation();
 public:
 	MeshObject();
-	MeshObject(Mesh& meshData, Material m = Material(Vector(0.5,0.5,0.5)));
+	MeshObject(Mesh& meshData, Material* m = new Material(Vector(0.5,0.5,0.5)));
 	~MeshObject();
 
 	void SetMesh(Mesh& meshData);

@@ -10,14 +10,22 @@ Vector Shader::CalculateShading(Intersection& hit, Ray& view, Scene* scene, int 
 		depth++;
 		if (depth > MAX_REFLECTION_DEPTH)
 		{
-			return Vector(1, 1, 1);
+			return Vector(0.9, 0.9, 0.9);
 		}
 
 		Vector reflectionDir = view.direction - ((hit.normal*(view.direction*hit.normal)) * 2);
 		Ray reflectionRay = Ray(hit.hit, reflectionDir);
 		Intersection reflectionResult = reflectionRay.TraceObjects(scene->objects);
-
-		Vector reflColor = CalculateShading(reflectionResult, reflectionRay, scene, renderMode, depth);
+		Vector reflColor;
+		if (!reflectionResult.success)
+		{
+			reflColor = Vector(0.9, 0.9, 0.9);
+		}
+		else
+		{
+			reflColor = CalculateShading(reflectionResult, reflectionRay, scene, renderMode, depth);
+		}
+		
 		curentColor = (hit.matInfo.diffuse * hit.matInfo.roughness) + (reflColor * (1 - hit.matInfo.roughness));
 		 
  

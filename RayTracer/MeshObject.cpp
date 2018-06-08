@@ -7,7 +7,7 @@ MeshObject::MeshObject()
 	transform = Matrix::Identity();
 }
 
-MeshObject::MeshObject(Mesh& meshData, Material m)
+MeshObject::MeshObject(Mesh& meshData, Material* m)
 {
 	mat = m;
 	transform = Matrix::Identity();
@@ -86,9 +86,10 @@ Intersection MeshObject::Trace(Ray& r)
 	if (initialTest.success)
 	{
 		//go deeper
-		Intersection result = transformedMesh->Trace(r, transform);
+		double u, v;
+		Intersection result = transformedMesh->Trace(r, transform,u,v);
 		//transform mesh
-		result.matInfo = mat.GetMatInfo();
+		result.matInfo = mat->GetMatInfo(u*10,v*10);
 		return result;
 		//cast tris
 	}

@@ -16,8 +16,10 @@
 #define NUM_THREADS 4
 int main(int argc, char *args[])
 {
+	int modes[] = { SHADELESS, SHADELESS | DIFFUSE, SHADELESS | DIFFUSE | SPECULAR, SHADELESS | DIFFUSE | SPECULAR | SHADOWS,SHADELESS | DIFFUSE | SPECULAR | SHADOWS | REFLECTIONS };
 	Scene defaultScene;
-	defaultScene.InitDefault();
+	//defaultScene.InitDefault();
+	defaultScene.InitAnimScene();
 	SDLCameraRenderer sdlPreview(defaultScene.camera);// = SDLCameraRenderer(defaultScene.camera);
 	Renderer renderer(defaultScene);// = Renderer(defaultScene);
 	renderer.Config(8, 8, NUM_THREADS);
@@ -27,7 +29,7 @@ int main(int argc, char *args[])
 	SDL_Event event;
 	bool KeepRunning = true;
 	bool SomethingHappened = false;
-	bool Animate = false;
+	bool Animate = true;
 
 	while (KeepRunning)
 	{
@@ -111,6 +113,36 @@ int main(int argc, char *args[])
 						Vector rot = defaultScene.camera.rot;
 						rot.y += +5.0 / 180 * M_PI;
 						defaultScene.camera.SetRotation(rot);
+						break;
+					}
+					case SDLK_1:
+					{
+						SomethingHappened = true;
+						renderer.SetRenderMode(modes[0]);
+						break;
+					}
+					case SDLK_2:
+					{
+						SomethingHappened = true;
+						renderer.SetRenderMode(modes[1]);
+						break;
+					}
+					case SDLK_3:
+					{
+						SomethingHappened = true;
+						renderer.SetRenderMode(modes[2]);
+						break;
+					}
+					case SDLK_4:
+					{
+						SomethingHappened = true;
+						renderer.SetRenderMode(modes[3]);
+						break;
+					}
+					case SDLK_5:
+					{
+						SomethingHappened = true;
+						renderer.SetRenderMode(modes[4]);
 						break;
 					}
 

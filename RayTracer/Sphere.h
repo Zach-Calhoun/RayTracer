@@ -10,7 +10,9 @@ public:
 
 
 	Sphere();
-	Sphere(Vector o, double r, Material mat = Material(Vector(0.5,0.5,0.5)));
+	Sphere(Vector o, double r, Material* mat = new Material(Vector(0.5,0.5,0.5)));
+	Sphere(Vector o, double r, Vector mat);
 	Intersection Trace(Ray& r);
-
+	Vector GetPos();
+	void SetPos(Vector p);
 };
